@@ -10,5 +10,9 @@ class Usuario extends Model
 
     public function Author(){
       return $this->belongsTo('App\User','author_id');
-        }
+    }
+    
+   public static function validarEmail($email) {
+       return \DB::table('usuarios')->where('email', '=', $email)->get();
+      }
 }

@@ -45,7 +45,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="home">Juegos Nacionales</a>
+                    <a class="navbar-brand" href="home">Juegos Nacionales APP</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -60,7 +60,7 @@
                         <li><a href="/home" >San Ramón</a></li>
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-
+                            <!-- sacar el usuario del sistema  -->
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
                         @else
                             <li class="dropdown">

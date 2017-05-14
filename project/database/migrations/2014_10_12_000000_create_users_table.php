@@ -18,8 +18,14 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->rememberToken();
+            $table->string('cedula_usuario')->nullable();
+            $table->string('nombre2')->nullable();
+            $table->string('apellido1')->nullable();
+            $table->string('apellido2')->nullable();
+            $table->string('tipo')->nullable();
+            $table->boolean('active_flag');
             $table->timestamps();
+            $table->rememberToken();
         });
     }
 

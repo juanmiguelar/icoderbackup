@@ -11,4 +11,8 @@ class Deporte extends Model
     public function Author(){
       return $this->belongsTo('App\User','author_id');
         }
+        
+    public function insertarDeporte($deporte){
+      \DB::table ('deportes')->insert(['nombre' => $deporte->nombre, 'tipo' => $deporte->tipo, 'numero_maximo_atletas' => $deporte->numero_maximo_atletas]);
+    }
 }

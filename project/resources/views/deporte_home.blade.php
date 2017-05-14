@@ -1,4 +1,13 @@
-@extends('layouts.app')
+
+@if(Auth::user()->tipo == "superadmin")
+    <?php $layout = 'layoutSuperAdmin'; ?>
+@elseif (Auth::user()->tipo == "admin")
+    <?php $layout = 'layoutAdmin'; ?>
+@else
+    <?php $layout = 'layoutEstandar'; ?>
+@endif
+
+@extends($layout)
 
 @section('content')
 <div class="container">

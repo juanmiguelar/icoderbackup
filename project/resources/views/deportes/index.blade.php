@@ -1,5 +1,8 @@
-@if($tipo_usuario == "super_admin")
+@
+@if(Auth::user()->tipo == "superadmin")
     <?php $layout = 'layoutSuperAdmin'; ?>
+@elseif (Auth::user()->tipo == "admin")
+    <?php $layout = 'layoutAdmin'; ?>
 @else
     <?php $layout = 'layoutEstandar'; ?>
 @endif

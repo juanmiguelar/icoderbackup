@@ -61,27 +61,28 @@ class UsuarioController extends Controller
 	 */
 	public function store(Request $request, User $user)
 	{
+		$usuario = Usuario::validarEmail($request->input("email"));
+		if ($usuario) {
+			\Flash::error('El correo digitado ya se encuentra en uso, intente con uno nuevo');
+		return redirect('usuarios/create');
+		} else {
+			 $this->validate($request, [
+		 	'nombre' => 'required',
+        	'apellidos' => 'required',
+        	'correo' => 'required',
+        	'contrasena'=> 'required',
+    		]);
+    		
 		$usuario = new Usuario();
-
-		$usuario->name = ucfirst($request->input("name"));
-		$usuario->slug = str_slug($request->input("name"), "-");
-		$usuario->description = ucfirst($request->input("description"));
-		$usuario->active_flag = 1;
-		$usuario->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:usuarios',
-					 'description' => 'required'
-			 ]);
-
+		$usuario->NOMBRE_USUARIO = $request->input("nombre");
+        $usuario->APELLIDO = $request->input("apellidos");
+        $usuario->CORREO = $request->input("correo");
+        $usuario->CONTRASENNA = $request->input("contrasena");
+        $usuario->TIPO = $request->input("tipo");
 		$usuario->save();
-
-		Session::flash('message_type', 'success');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Usuario \"<a href='usuarios/$usuario->slug'>" . $usuario->name . "</a>\" was Created.");
-
-		return redirect()->route('usuarios.index');
+		\Flash::message('Usuario ingresado con éxito');
+		return redirect('usuarios');
+		}
 	}
 
 	/**
@@ -178,4 +179,5 @@ class UsuarioController extends Controller
 
 		return redirect()->route('usuarios.index');
 	}
+	
 }

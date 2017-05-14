@@ -12,12 +12,8 @@ class CreateDeportesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('deportes', function(Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->default('Un-Named Deporte');
-            $table->string('slug');
-            $table->text('description');
-            $table->integer('id_deporte');
+		Schema::create('deporte', function(Blueprint $table) {
+            $table->increments('id_deporte');
             $table->string('nombre');
             $table->string('tipo');
             $table->integer('numero_maximo_atletas');

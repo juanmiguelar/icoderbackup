@@ -13,11 +13,8 @@ class CreateCategoriasTable extends Migration {
 	public function up()
 	{
 		Schema::create('categorias', function(Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->default('Un-Named Categoria');
-            $table->string('slug');
-            $table->text('description');
-            $table->integer('id_categoria');
+            $table->increments('id_categoria');
+            $table->integer('id_deporte')->references('id_deporte')->on('deportes');
             $table->string('nombre');
             $table->integer('edad_inicio');
             $table->integer('edad_final');

@@ -59,7 +59,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Juegos Nacionales</a>
+                <a class="navbar-brand" href="/">Juegos Nacionales Estandar</a>
             </div>
              <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">

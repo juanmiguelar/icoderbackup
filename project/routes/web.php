@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::resource("cantons","CantonController");
 Route::resource("categorias","CategoriumController");
 Route::resource("deportistas","DeportistumController");
@@ -27,18 +28,20 @@ Route::resource("inscripcions","InscripcionController");
 Route::resource("pruebas","PruebaController");
 Route::resource("ramas","RamaController");
 
-//Deportes
+//DEPORTES
 Route::resource("deportes","DeporteController");
 
 Route::get("ver_deporte/{id_deporte}", array("as"=>"dashboard","uses"=>"DeporteController@show"));
+Route::post("ingresar_deporte/", array("as"=>"dashboard","uses"=>"DeporteController@ingresar_deporte"));
 
 
-
+// Fijo aqui estan declaradas las routes del login y registro
 Auth::routes();
 
 Route::resource('home', 'HomeController');
 Route::get("inscripcion_individual", array("as"=>"dashboard","uses"=>"InscribeController@individual"));
 
+//PERSONAS
 Route::post("agregarPersona/{cedula_persona}/{nombre1}/{nombre2}/{apellido1}/{apellido2}/{fecha_nacimiento}/{nacionalidad}/{telefono}/{direccion}/{estatura}/{peso}/{tipo_sangre}/{tipo}/{email}/{cedula_frente}/{cedula_atras}/{boleta_inscripcion}", array("as"=>"dashboard", "uses"=>"PersonaController@agregarPersona"));
 
 

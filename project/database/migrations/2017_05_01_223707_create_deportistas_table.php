@@ -12,7 +12,7 @@ class CreateDeportistasTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('deportistas', function(Blueprint $table) {
+		Schema::create('deportista', function(Blueprint $table) {
             $table->increments('id');
             $table->string('name')->default('Un-Named Deportistum');
             $table->string('slug');

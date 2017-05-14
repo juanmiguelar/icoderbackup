@@ -1,4 +1,11 @@
-@extends('layout')
+
+@if(Auth::user()->tipo == "superadmin")
+    <?php $layout = 'layoutSuperAdmin'; ?>
+@else
+    <?php $layout = 'layoutEstandar'; ?>
+@endif
+
+@extends('layoutAdmin')
 
 @section('header')
     <div class="page-header clearfix">

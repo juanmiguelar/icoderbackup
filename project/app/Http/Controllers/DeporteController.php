@@ -189,4 +189,9 @@ class DeporteController extends Controller
 
 		return redirect()->route('deportes.index');
 	}
+	
+	
+	public function insertarNuevoDeporte($deporte){
+		Deporte::insertarDeporte($deporte);
+	}
 }

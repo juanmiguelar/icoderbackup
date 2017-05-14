@@ -36,7 +36,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Juegos Nacionales</a>
+                <a class="navbar-brand" href="/">Juegos Nacionales layoutAdmin</a>
             </div>
              <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
@@ -44,7 +44,7 @@
 
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-
+                            <!-- Sacarlo de la página -->
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
                         @else
                             <li><a href="/home" >San Ramón</a></li>
