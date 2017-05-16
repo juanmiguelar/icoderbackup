@@ -38,7 +38,7 @@ class ProvinciumController extends Controller
 	 */
 	public function index()
 	{
-		$provincias = Provincium::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+		$provincias = Provincium::obtenerProvincias();
 		$active = Provincium::where('active_flag', 1);
 		return view('provincias.index', compact('provincias', 'active'));
 	}
@@ -90,9 +90,9 @@ class ProvinciumController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Provincium $provincium)
+	public function show($id_provincia)
 	{
-		//$provincium = $this->model->findOrFail($id);
+		$provincium = Provincium::showProvinvcia($id_provincia);
 
 		return view('provincias.show', compact('provincium'));
 	}

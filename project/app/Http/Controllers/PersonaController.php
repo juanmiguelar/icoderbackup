@@ -38,7 +38,7 @@ class PersonaController extends Controller
 	 */
 	public function index()
 	{
-		$personas = Persona::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+		$personas = Persona::where('active_flag', 1)->orderBy('nombre1', 'desc')->paginate(10);
 		$active = Persona::where('active_flag', 1);
 		return view('personas.index', compact('personas', 'active'));
 	}
@@ -90,9 +90,9 @@ class PersonaController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Persona $persona)
+	public function show($cedula_persona)
 	{
-		//$persona = $this->model->findOrFail($id);
+		$persona = Persona::showPersona($cedula_persona);
 
 		return view('personas.show', compact('persona'));
 	}

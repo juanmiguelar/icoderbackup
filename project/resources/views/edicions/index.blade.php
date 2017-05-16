@@ -1,11 +1,11 @@
-@extends('layout')
+@extends(Auth::user()->tipo)
 
 @section('header')
     <div class="page-header clearfix">
-        <h1>
-            <i class="glyphicon glyphicon-align-justify"></i> Edicion
-            <a class="btn btn-success pull-right" href="{{ route('edicions.create') }}"><i class="glyphicon glyphicon-plus"></i> Create</a>
-        </h1>
+        <h3>
+            <i class="glyphicon glyphicon-align-justify"></i> Ediciones
+            <a class="btn btn-success pull-right" href="{{ route('edicions.create') }}"><i class="glyphicon glyphicon-plus"></i> Crear</a>
+        </h3>
     </div>
 @endsection
 
@@ -17,8 +17,9 @@
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
-                            <th>Lugar</th> <th>Fecha_inicio</th> <th>Fecha_fin</th> <th>Fecha_inscripcion</th> <th>Fecha_fin_inscripcion</th>
-                            <th class="text-right">OPTIONS</th>
+                            <th>Lugar</th>
+                            <th>Año</th>
+                            <th class="text-right">Opciones</th>
                         </tr>
                     </thead>
 
@@ -27,22 +28,23 @@
                             <tr>
                                 <td class="text-center"><strong>{{$edicion->id}}</strong></td>
 
-                                <td>{{$edicion->lugar}}</td> <td>{{$edicion->fecha_inicio}}</td> <td>{{$edicion->fecha_fin}}</td> <td>{{$edicion->fecha_inscripcion}}</td> <td>{{$edicion->fecha_fin_inscripcion}}</td>
+                                <td>{{$edicion->lugar}}</td> 
+                                <td>{{$edicion->anno}}</td> 
                                 
                                 <td class="text-right">
                                     <a class="btn btn-xs btn-primary" href="{{ route('edicions.show', $edicion->id) }}">
-                                        <i class="glyphicon glyphicon-eye-open"></i> View
+                                        <i class="glyphicon glyphicon-eye-open"></i> Ver
                                     </a>
                                     
                                     <a class="btn btn-xs btn-warning" href="{{ route('edicions.edit', $edicion->id) }}">
-                                        <i class="glyphicon glyphicon-edit"></i> Edit
+                                        <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 
                                     <form action="{{ route('edicions.destroy', $edicion->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="DELETE">
 
-                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                                     </form>
                                 </td>
                             </tr>
@@ -51,7 +53,7 @@
                 </table>
                 {!! $edicions->render() !!}
             @else
-                <h3 class="text-center alert alert-info">Empty!</h3>
+                <h3 class="text-center alert alert-info">No hay ediciones registradas</h3>
             @endif
 
         </div>

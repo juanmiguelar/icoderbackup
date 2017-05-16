@@ -1,11 +1,11 @@
-@extends('layout')
+@extends(Auth::user()->tipo)
 
 @section('header')
     <div class="page-header clearfix">
-        <h1>
-            <i class="glyphicon glyphicon-align-justify"></i> Categorium
-            <a class="btn btn-success pull-right" href="{{ route('categorias.create') }}"><i class="glyphicon glyphicon-plus"></i> Create</a>
-        </h1>
+        <h3>
+            <i class="glyphicon glyphicon-align-justify"></i> Categorías
+            <a class="btn btn-success pull-right" href="{{ route('categorias.create') }}"><i class="glyphicon glyphicon-plus"></i> Crear</a>
+        </h3>
     </div>
 @endsection
 
@@ -18,31 +18,31 @@
                         <tr>
                             <th class="text-center">#</th>
                             <th>Nombre</th>
-                            <th class="text-right">OPTIONS</th>
+                            <th class="text-right">Opciones</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach($categorias as $categorium)
+                        @foreach($categorias as $categoria)
                             <tr>
-                                <td class="text-center"><strong>{{$categorium->id}}</strong></td>
+                                <td class="text-center"><strong>{{$categoria->id_categoria}}</strong></td>
 
-                                <td>{{$categorium->nombre}}</td>
+                                <td>{{$categoria->nombre}}</td>
                                 
                                 <td class="text-right">
-                                    <a class="btn btn-xs btn-primary" href="{{ route('categorias.show', $categorium->id) }}">
-                                        <i class="glyphicon glyphicon-eye-open"></i> View
+                                    <a class="btn btn-xs btn-primary" href="{{ route('categorias.show', $categoria->id_categoria) }}">
+                                        <i class="glyphicon glyphicon-eye-open"></i> Ver
                                     </a>
                                     
-                                    <a class="btn btn-xs btn-warning" href="{{ route('categorias.edit', $categorium->id) }}">
-                                        <i class="glyphicon glyphicon-edit"></i> Edit
+                                    <a class="btn btn-xs btn-warning" href="{{ route('categorias.edit', $categoria->id) }}">
+                                        <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 
-                                    <form action="{{ route('categorias.destroy', $categorium->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
+                                    <form action="{{ route('categorias.destroy', $categoria->id_categoria) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="DELETE">
 
-                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                                     </form>
                                 </td>
                             </tr>
@@ -51,7 +51,7 @@
                 </table>
                 {!! $categorias->render() !!}
             @else
-                <h3 class="text-center alert alert-info">Empty!</h3>
+                <h3 class="text-center alert alert-info">No hay categorías registradas</h3>
             @endif
 
         </div>

@@ -38,7 +38,7 @@ class CategoriaController extends Controller
 	 */
 	public function index()
 	{
-		$categorias = Categoria::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+		$categorias = Categoria::where('active_flag', 1)->orderBy('id_categoria', 'desc')->paginate(10);
 		$active = Categoria::where('active_flag', 1);
 		return view('categorias.index', compact('categorias', 'active'));
 	}
@@ -90,10 +90,11 @@ class CategoriaController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Categoria $categoria)
+	public function show($id_categoria)
 	{
-		//$categoria = $this->model->findOrFail($id);
-
+	
+		$categoria = Categoria::showCategoria($id_categoria);
+		
 		return view('categorias.show', compact('categoria'));
 	}
 

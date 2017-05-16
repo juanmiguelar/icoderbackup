@@ -1,14 +1,4 @@
-@
-@if(Auth::user()->tipo == "superadmin")
-    <?php $layout = 'layoutSuperAdmin'; ?>
-@elseif (Auth::user()->tipo == "admin")
-    <?php $layout = 'layoutAdmin'; ?>
-@else
-    <?php $layout = 'layoutEstandar'; ?>
-@endif
-
-@extends($layout)
-
+@extends(Auth::user()->tipo)
 
 @section('header')
     <div class="page-header clearfix">
@@ -38,9 +28,6 @@
                                 <td>{{$deporte->nombre}}</td> <td>{{$deporte->numero_maximo_atletas}}</td> <td>{{$deporte->tipo}}</td>
                                 
                                 <td class="text-right">
-                                    <a class="btn btn-xs btn-primary" href="{{ route('deportes.show', $deporte->id_deporte) }}">
-                                        <i class="glyphicon glyphicon-eye-open"></i> Ver
-                                    </a>
                                     
                                     <a class="btn btn-xs btn-warning" href="{{ route('deportes.edit', $deporte->id_deporte) }}">
                                         <i class="glyphicon glyphicon-edit"></i> Editar
@@ -59,7 +46,7 @@
                 </table>
                 {!! $deportes->render() !!}
             @else
-                <h3 class="text-center alert alert-info">No hay deportes!</h3>
+                <h3 class="text-center alert alert-info">No hay deportes registrados</h3>
             @endif
 
         </div>

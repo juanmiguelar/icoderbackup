@@ -38,7 +38,7 @@ class EdicionController extends Controller
 	 */
 	public function index()
 	{
-		$edicions = Edicion::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+		$edicions = Edicion::where('active_flag', 1)->orderBy('anno', 'desc')->paginate(10);
 		$active = Edicion::where('active_flag', 1);
 		return view('edicions.index', compact('edicions', 'active'));
 	}
@@ -50,7 +50,8 @@ class EdicionController extends Controller
 	 */
 	public function create()
 	{
-		return view('edicions.create');
+		$anno = date_format(date_create(date('Y-m-d H:i:s')), 'Y');
+		return view('edicions.create',  compact('anno'));
 	}
 
 	/**
@@ -62,24 +63,34 @@ class EdicionController extends Controller
 	public function store(Request $request, User $user)
 	{
 		$edicion = new Edicion();
+		
+		$edicion->lugar = $request->input("lugar");
+		$edicion->fecha_inicio = $request->input("fecha_inicio");
+		$edicion->fecha_fin = $request->input("fecha_fin");
+		$edicion->fecha_inscripcion = $request->input("fecha_inscripcion");
+		$edicion->fecha_fin_inscripcion = $request->input("fecha_fin_inscripcion");
+		$userid = $request->user()->id;
+		
+		edicion:: insertarEdicion($edicion, $userid);
+		
 
-		$edicion->name = ucfirst($request->input("name"));
-		$edicion->slug = str_slug($request->input("name"), "-");
-		$edicion->description = ucfirst($request->input("description"));
-		$edicion->active_flag = 1;
-		$edicion->author_id = $request->user()->id;
+		// $edicion->name = ucfirst($request->input("name"));
+		// $edicion->slug = str_slug($request->input("name"), "-");
+		// $edicion->description = ucfirst($request->input("description"));
+		// $edicion->active_flag = 1;
+		// $edicion->author_id = $request->user()->id;
 
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:edicions',
-					 'description' => 'required'
-			 ]);
+		// $this->validate($request, [
+		// 			 'name' => 'required|max:255|unique:edicions',
+		// 			 'description' => 'required'
+		// 	 ]);
 
-		$edicion->save();
+		// $edicion->save();
 
-		Session::flash('message_type', 'success');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Edicion \"<a href='edicions/$edicion->slug'>" . $edicion->name . "</a>\" was Created.");
+		// Session::flash('message_type', 'success');
+		// Session::flash('message_icon', 'checkmark');
+		// Session::flash('message_header', 'Success');
+		// Session::flash('message', "The Edicion \"<a href='edicions/$edicion->slug'>" . $edicion->name . "</a>\" was Created.");
 
 		return redirect()->route('edicions.index');
 	}

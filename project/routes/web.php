@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 
 Route::resource("cantons","CantonController");
-Route::resource("categorias","CategoriumController");
+Route::resource("categorias","CategoriaController");
 Route::resource("deportistas","DeportistumController");
 Route::resource("edicions","EdicionController");
 Route::resource("provincias","ProvinciumController");
@@ -28,14 +28,14 @@ Route::resource("inscripcions","InscripcionController");
 Route::resource("pruebas","PruebaController");
 Route::resource("ramas","RamaController");
 
-//DEPORTES
+/*DEPORTES*/
 Route::resource("deportes","DeporteController");
 
 Route::get("ver_deporte/{id_deporte}", array("as"=>"dashboard","uses"=>"DeporteController@show"));
 Route::post("ingresar_deporte/", array("as"=>"dashboard","uses"=>"DeporteController@ingresar_deporte"));
 
 
-// Fijo aqui estan declaradas las routes del login y registro
+/* Fijo aqui estan declaradas las routes del login y registro */
 Auth::routes();
 
 Route::resource('home', 'HomeController');
@@ -44,6 +44,9 @@ Route::get("inscripcion_individual", array("as"=>"dashboard","uses"=>"InscribeCo
 //PERSONAS
 Route::post("agregarPersona/{cedula_persona}/{nombre1}/{nombre2}/{apellido1}/{apellido2}/{fecha_nacimiento}/{nacionalidad}/{telefono}/{direccion}/{estatura}/{peso}/{tipo_sangre}/{tipo}/{email}/{cedula_frente}/{cedula_atras}/{boleta_inscripcion}", array("as"=>"dashboard", "uses"=>"PersonaController@agregarPersona"));
 
+
+//EDICIONES
+Route::post("nueva_edicion/", array("as"=>"dashboard","uses"=>"EdicionController@store"));
 
 //RUTA
 //Route::get("usuarios_equipos/{correo}", array("as"=>"dashboard","uses"=>"UsuarioController@mostrarEquiposRelacionados"));

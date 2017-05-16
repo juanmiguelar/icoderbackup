@@ -1,11 +1,11 @@
-@extends('layout')
+@extends(Auth::user()->tipo)
 
 @section('header')
     <div class="page-header clearfix">
-        <h1>
-            <i class="glyphicon glyphicon-align-justify"></i> Provincium
-            <a class="btn btn-success pull-right" href="{{ route('provincias.create') }}"><i class="glyphicon glyphicon-plus"></i> Create</a>
-        </h1>
+        <h3>
+            <i class="glyphicon glyphicon-align-justify"></i> Provincias
+            <a class="btn btn-success pull-right" href="{{ route('provincias.create') }}"><i class="glyphicon glyphicon-plus"></i> Crear</a>
+        </h3>
     </div>
 @endsection
 
@@ -18,31 +18,28 @@
                         <tr>
                             <th class="text-center">#</th>
                             <th>Nombre</th>
-                            <th class="text-right">OPTIONS</th>
+                            <th class="text-right">Opciones</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach($provincias as $provincium)
                             <tr>
-                                <td class="text-center"><strong>{{$provincium->id}}</strong></td>
+                                <td class="text-center"><strong>{{$provincium->id_provincia}}</strong></td>
 
-                                <td>{{$provincium->nombre}}</td>
+                                <td>{{$provincium->nombre_provincia}}</td>
                                 
                                 <td class="text-right">
-                                    <a class="btn btn-xs btn-primary" href="{{ route('provincias.show', $provincium->id) }}">
-                                        <i class="glyphicon glyphicon-eye-open"></i> View
-                                    </a>
                                     
                                     <a class="btn btn-xs btn-warning" href="{{ route('provincias.edit', $provincium->id) }}">
-                                        <i class="glyphicon glyphicon-edit"></i> Edit
+                                        <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 
                                     <form action="{{ route('provincias.destroy', $provincium->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="DELETE">
 
-                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                                     </form>
                                 </td>
                             </tr>
@@ -51,7 +48,7 @@
                 </table>
                 {!! $provincias->render() !!}
             @else
-                <h3 class="text-center alert alert-info">Empty!</h3>
+                <h3 class="text-center alert alert-info">No hay provincias registradas</h3>
             @endif
 
         </div>

@@ -36,18 +36,15 @@ class DeporteController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index($nombre = "none")
 	{
-		// Sacarla de la session
-		$tipo_usuario= 'super_admin..';
+		if ($nombre == "none") {
+			$deportes = Deporte::where('active_flag', 1)->orderBy('id_deporte', 'desc')->paginate(10);
+		}else{
+			$deportes = Deporte::where('active_flag', 1)->where('nombre', $nombre)->orderBy('id_deporte', 'desc')->paginate(10);
+		}
 		
-		// $deportes = Deporte::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
-		// $active = Deporte::where('active_flag', 1);
-		// return view('deportes.index', compact('deportes', 'active'));
-		
-		
-		$deportes = Deporte::orderBy('id_deporte', 'desc')->paginate(10);
-		return view('deportes.index', compact('deportes', 'tipo_usuario'));
+		return view('deportes.index', compact('deportes'));
 	}
 
 	/**
@@ -69,7 +66,15 @@ class DeporteController extends Controller
 	public function store(Request $request, User $user)
 	{
 		$deporte = new Deporte();
+		$deporte->nombre = $request->input("nombre");
+		$deporte->tipo = $request->input("tipo");
+		$deporte->numero_maximo_atletas = $request->input("numero");
+		$userid = $request->user()->id;
+		
+		Deporte:: insertarDeporte($deporte, $userid);
 
+		
+		/**
 		$deporte->name = ucfirst($request->input("name"));
 		$deporte->slug = str_slug($request->input("name"), "-");
 		$deporte->description = ucfirst($request->input("description"));
@@ -87,7 +92,8 @@ class DeporteController extends Controller
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
 		Session::flash('message', "The Deporte \"<a href='deportes/$deporte->slug'>" . $deporte->name . "</a>\" was Created.");
-
+		**/
+		
 		return redirect()->route('deportes.index');
 	}
 
@@ -99,11 +105,10 @@ class DeporteController extends Controller
 	 */
 	public function show($id_deporte)
 	{
-		$tipo_usuario= 'super_admin';
-	
+		
 		$deporte = Deporte::where('id_deporte', $id_deporte)->first();
 		
-		return view('deportes.show', compact('deporte', 'tipo_usuario'));
+		return view('deportes.show', compact('deporte'));
 	}
 
 	/**
@@ -126,11 +131,20 @@ class DeporteController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function update(Request $request, Deporte $deporte, User $user)
+	public function update(Request $request, $id, User $user)
 	{
 
-		$deporte->name = ucfirst($request->input("name"));
-    $deporte->slug = str_slug($request->input("name"), "-");
+		$deporte = Deporte::where( 'id_deporte' , $id)->first();
+		$deporte->nombre = $request->input("nombre");
+		$deporte->tipo = $request->input("tipo");
+		$deporte->numero_maximo_atletas = $request->input("numero");
+		$userid = $request->user()->id;
+		
+		Deporte:: editarDeporte($deporte, $userid);
+		
+		
+		/*$deporte->name = ucfirst($request->input("name"));
+    	$deporte->slug = str_slug($request->input("name"), "-");
 		$deporte->description = ucfirst($request->input("description"));
 		$deporte->active_flag = 1;//change to reflect current status or changed status
 		$deporte->author_id = $request->user()->id;
@@ -146,7 +160,8 @@ class DeporteController extends Controller
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
 		Session::flash('message', "The Deporte \"<a href='deportes/$deporte->slug'>" . $deporte->name . "</a>\" was Updated.");
-
+		*/
+		
 		return redirect()->route('deportes.index');
 	}
 
@@ -190,8 +205,9 @@ class DeporteController extends Controller
 		return redirect()->route('deportes.index');
 	}
 	
-	
 	public function insertarNuevoDeporte($deporte){
 		Deporte::insertarDeporte($deporte);
 	}
+	
+	
 }

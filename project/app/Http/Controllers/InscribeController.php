@@ -40,7 +40,7 @@ class InscribeController extends Controller
 	{
 	//	$inscribes = Inscribe::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
 	//	$active = Inscribe::where('active_flag', 1);
-		return view('');
+		return view('inscribes.index');
 	}
 	
 	public function individual()

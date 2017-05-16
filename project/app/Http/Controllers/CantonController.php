@@ -9,6 +9,7 @@ use App\User;
 use Auth;
 
 use App\Canton;
+use App\Provincium;
 use Illuminate\Http\Request;
 use \Session;
 
@@ -38,8 +39,11 @@ class CantonController extends Controller
 	 */
 	public function index()
 	{
-		$cantons = Canton::orderBy('id_canton', 'desc')->paginate(2);
-		return view('cantons.index', compact('cantons'));
+		$cantons = Canton::obtenerCantones();
+		
+		$provincias = Provincium::obtenerProvincias();
+		
+		return view('cantons.index', compact('cantons', 'provincias'));
 	}
 
 	/**

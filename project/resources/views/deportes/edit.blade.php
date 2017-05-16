@@ -1,8 +1,9 @@
-@extends('layout')
+@extends(Auth::user()->tipo)
 
 @section('header')
     <div class="page-header">
-        <h1><i class="glyphicon glyphicon-edit"></i> Deporte / Edit #{{$deporte->id}}</h1>
+        <h3><i class="glyphicon glyphicon-edit"></i> Editar Deporte: {{$deporte->nombre}}</h3>
+        
     </div>
 @endsection
 
@@ -11,28 +12,46 @@
 
     <div class="row">
         <div class="col-md-12">
-
-            <form action="{{ route('deportes.update', $deporte->id) }}" method="POST">
+            <form action="{{ route('deportes.update', $deporte->id_deporte) }}" method="POST">
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
                 <div class="form-group">
-	<label for="nombre-field">Nombre</label>
-	<input class="form-control" type="text" name="nombre" id="nombre-field" value="{{ old('nombre', $deporte->nombre ) }}" />
-</div> <div class="form-group">
-	<label for="numero_maximo_atletas-field">Numero_maximo_atletas</label>
-	--numero_maximo_atletas--
-</div> <div class="form-group">
-	<label for="tipo-field">Tipo</label>
-	<input class="form-control" type="text" name="tipo" id="tipo-field" value="{{ old('tipo', $deporte->tipo ) }}" />
-</div>
-
+	                <label for="nombre-field">Nombre</label>
+                	<input class="form-control" type="text" name="nombre" id="nombre-field" value="{{ old('nombre', $deporte->nombre ) }}" />
+                </div> 
+                <div class="form-group">
+                	<label for="tipo-field">Tipo</label>
+                	 <div class="row">
+                	        <div class="col-xs-6 col-sm-3">
+                                <div class="tipo">
+                                    <select   class="selectpicker form-control" id="tipo-field" name="tipo" required>
+                                            <option value="Individual" {{ $deporte->tipo == "Individual" ? 'selected' : '' }}>Individual</option>
+                                            <option value="Grupal" {{ $deporte->tipo == "Grupal" ? 'selected' : '' }}>Grupal</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                	    <label for="numero_maximo_atletas-field">Número máximo de atletas</label>
+                	    <div class="row">
+                	        <div class="col-md-1">
+                                <div class="numero_maximo_atletas">
+                                    <select class="selectpicker form-control" id="numero_maximo_atletas-field" name="numero" required>
+                                        @for ($i = 1; $i < 51; $i++)
+                                           <option value= "{{ $i }}" {{ $deporte->numero_maximo_atletas == $i ? 'selected' : '' }}>{{$i}}</option> 
+                                            
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <div class="well well-sm">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <a class="btn btn-link pull-right" href="{{ route('deportes.index') }}"><i class="glyphicon glyphicon-backward"></i>  Back</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a class="btn btn-link pull-right" href="{{ route('deportes.index') }}"><i class="glyphicon glyphicon-backward"></i>Volver</a>
                 </div>
             </form>
-
         </div>
     </div>
 @endsection

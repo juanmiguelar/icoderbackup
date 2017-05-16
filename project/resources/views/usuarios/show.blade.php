@@ -1,4 +1,5 @@
-@extends('layout')
+@extends(Auth::user()->tipo)
+
 @section('header')
     <div class="page-header">
         <h1>Usuario / Show #{{$usuario->id}}</h1>

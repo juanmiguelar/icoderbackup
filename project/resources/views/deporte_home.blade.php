@@ -1,13 +1,5 @@
 
-@if(Auth::user()->tipo == "superadmin")
-    <?php $layout = 'layoutSuperAdmin'; ?>
-@elseif (Auth::user()->tipo == "admin")
-    <?php $layout = 'layoutAdmin'; ?>
-@else
-    <?php $layout = 'layoutEstandar'; ?>
-@endif
-
-@extends($layout)
+@extends(Auth::user()->tipo)
 
 @section('content')
 <div class="container">
@@ -23,9 +15,9 @@
                         <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="{{ url('deportistas') }}">Atletismo</a></li>
-                        <li><a href="#">Baloncesto</a></li>
-                        <li><a href="#">Natación</a></li>
+                        @foreach($deportes as $deporte)
+                            <li><a href="{{ route('deportistas.index', $deporte->nombre) }}">{{$deporte->nombre}}</a></li>
+                        @endforeach
                       </ul>
                     </div>
                 </div>

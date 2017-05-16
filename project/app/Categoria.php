@@ -11,4 +11,13 @@ class Categoria extends Model
     public function Author(){
       return $this->belongsTo('App\User','author_id');
     }
+    
+     public static function showCategoria($id_categoria) {
+         
+       $categoria =  Categoria::where('id_categoria', $id_categoria)->first();
+    
+       return $categoria;
+      }
+    
+     
 }

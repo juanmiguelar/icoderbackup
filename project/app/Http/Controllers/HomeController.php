@@ -4,6 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+
+use App\User;
+use Auth;
+
+use App\Deporte;
+use \Session;
+
 class HomeController extends Controller
 {
     /**
@@ -15,14 +24,10 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     
     public function index()
     {
-        return view('deporte_home');
+        $deportes = Deporte::orderBy('id_deporte', 'desc')->paginate(10);
+		return view('deporte_home', compact('deportes'));
     }
 }

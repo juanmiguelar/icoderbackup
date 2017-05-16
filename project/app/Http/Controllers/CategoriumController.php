@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
 
-use App\Categorium;
+use App\Categoria;
 use Illuminate\Http\Request;
 use \Session;
 
@@ -38,7 +38,7 @@ class CategoriumController extends Controller
 	 */
 	public function index()
 	{
-		$categorias = Categorium::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+		$categorias = Categorium::where('active_flag', 1)->orderBy('id_categoria', 'desc')->paginate(10);
 		$active = Categorium::where('active_flag', 1);
 		return view('categorias.index', compact('categorias', 'active'));
 	}
@@ -90,9 +90,9 @@ class CategoriumController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Categorium $categorium)
+	public function show(Categoria $categorium)
 	{
-		//$categorium = $this->model->findOrFail($id);
+		$categorium = $this->model->findOrFail($categorium->id_categoria);
 
 		return view('categorias.show', compact('categorium'));
 	}
