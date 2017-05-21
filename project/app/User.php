@@ -15,14 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
-        'cedula_usuario',
-        'nombre1',
-        'nombre2',
-        'apellido1',
-        'apellido2',
-        'tipo',
-        'email'
+        'name', 'email', 'password','tipo', 'id_canton'
     ];
 
     /**
@@ -47,5 +40,10 @@ class User extends Authenticatable
        $users = User::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
 		
        return $users;
-      }
+    }
+      
+    public static function validarEmail($email){
+      echo $table;
+      return false;
+    }
 }

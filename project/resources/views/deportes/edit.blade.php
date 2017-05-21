@@ -17,7 +17,7 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="form-group">
 	                <label for="nombre-field">Nombre</label>
-                	<input class="form-control" type="text" name="nombre" id="nombre-field" value="{{ old('nombre', $deporte->nombre ) }}" />
+                	<input class="form-control" type="text" name="nombre" id="nombre-field" value="{{ old('nombre', $deporte->nombre ) }}"  required/>
                 </div> 
                 <div class="form-group">
                 	<label for="tipo-field">Tipo</label>

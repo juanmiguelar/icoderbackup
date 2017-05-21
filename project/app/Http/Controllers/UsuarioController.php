@@ -62,27 +62,27 @@ class UsuarioController extends Controller
 	 */
 	public function store(Request $request, User $user)
 	{
-		$usuario = Usuario::validarEmail($request->input("email"));
-		if ($usuario) {
-			\Flash::error('El correo digitado ya se encuentra en uso, intente con uno nuevo');
-		return redirect('usuarios/create');
+		$verify = User::validarEmail($request->input("email"));
+		
+		if ($verify) {
+			// \Flash::error('El correo digitado ya se encuentra en uso, intente con uno nuevo');
+			return redirect('usuarios/create')-back()->withErrors(['Ya existe ese correo']);
 		} else {
 			 $this->validate($request, [
 		 	'nombre' => 'required',
-        	'apellidos' => 'required',
-        	'correo' => 'required',
-        	'contrasena'=> 'required',
+        	'email' => 'required',
+        	'contrasena' => 'required',
     		]);
     		
-		$usuario = new Usuario();
-		$usuario->NOMBRE_USUARIO = $request->input("nombre");
-        $usuario->APELLIDO = $request->input("apellidos");
-        $usuario->CORREO = $request->input("correo");
-        $usuario->CONTRASENNA = $request->input("contrasena");
-        $usuario->TIPO = $request->input("tipo");
-		$usuario->save();
-		\Flash::message('Usuario ingresado con éxito');
-		return redirect('usuarios');
+			$user = new User();
+			$user->name = $request->input("nombre");
+	        $user->email = $request->input("email");
+	        $user->password = $request->input("contrasena");
+	        $user->tipo = $request->input("tipo");
+	        $user->id_canton = 1;
+			$user->save();
+			// \Flash::message('Usuario ingresado con éxito');
+			return redirect('usuarios');
 		}
 	}
 
@@ -149,7 +149,7 @@ class UsuarioController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy(Usuario $usuario)
+	public function destroy(User $usuario)
 	{
 		$usuario->active_flag = 0;
 		$usuario->save();
@@ -189,7 +189,9 @@ class UsuarioController extends Controller
 	 */
 	public function showEditarPrivilegio($id)
 	{
-		return view('usuarios.editarPrivilegios');
+		$usuario = User::showUser($id);
+		echo $usuario;
+		return view('usuarios.editarPrivilegios', compact('usuario'));
 	}
 	public function editarPrivilegio($id)
 	{

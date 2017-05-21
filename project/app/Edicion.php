@@ -25,9 +25,9 @@ class Edicion extends Model
     public static function comprobarAnno($anno) {
         
          
-        $edicion =  Edicion::where('anno', $anno)->first();
+        $edicion =  Edicion::where('anno', $anno)->count();
     
-       return $edicion;
+        return $edicion;
       }
     
     

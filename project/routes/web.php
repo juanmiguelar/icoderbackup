@@ -48,6 +48,7 @@ Route::post("nueva_edicion/", array("as"=>"dashboard","uses"=>"EdicionController
 
 //USUARIO
 Route::get("editar_privilegio/{id}", array("as"=>"dashboard","uses"=>"UsuarioController@showEditarPrivilegio"));
+Route::post("store_editar_privilegio/{id}", array("as"=>"dashboard","uses"=>"UsuarioController@editarPrivilegio"));
 
 //RUTA
 //Route::get("usuarios_equipos/{correo}", array("as"=>"dashboard","uses"=>"UsuarioController@mostrarEquiposRelacionados"));

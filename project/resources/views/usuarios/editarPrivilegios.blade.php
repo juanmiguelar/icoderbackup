@@ -1,8 +1,7 @@
 @extends(Auth::user()->tipo)
-
 @section('header')
     <div class="page-header">
-        <h3><i class="glyphicon glyphicon-plus"></i> Editar Privilegios</h3>
+        <h3><i class="glyphicon glyphicon-plus"></i> Editar Privilegios: {{$usuario[0]->name}}</h3>
     </div>
 @endsection
 
@@ -12,7 +11,7 @@
     <div class="row">
         <div class="col-md-12">
 
-        <form action="{{ route('deportes.store') }}" method="POST">
+        <form action="{{URL::to('/') }}/store_editar_privilegio/{id}" method="POST">
      <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
     <div class="form-group">

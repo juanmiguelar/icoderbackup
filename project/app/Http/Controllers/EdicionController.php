@@ -62,9 +62,10 @@ class EdicionController extends Controller
 	 */
 	public function store(Request $request, User $user)
 	{
-		if (edicion:: comprobarAnno($request->input("anno")) == "0"){
+		
+		if (Edicion::comprobarAnno($request->input("anno")) > 0 ){
 			
-		return view('edicions.show')->withMessage("Ya existe una edición para este año, por favor verifique el año");
+			return redirect()->back()->withErrors([ 'Ya existe una edición para este año, por favor verifique el año']);
 			
 		}else{
 		

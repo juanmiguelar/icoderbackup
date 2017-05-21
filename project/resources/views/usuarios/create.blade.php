@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="page-header">
-        <h1><i class="glyphicon glyphicon-plus"></i> Usuario / Create </h1>
+        <h1><i class="glyphicon glyphicon-plus"></i> Crear usuarios</h1>
     </div>
 @endsection
 
@@ -16,34 +16,24 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                 <div class="form-group">
-                	<label for="cedula_usuario-field">Cedula_usuario</label>
-                	<input class="form-control" type="text" name="cedula_usuario" id="cedula_usuario-field" value="" />
+                	<label for="nombre-field">Nombre</label>
+                	<input class="form-control" type="text" name="nombre" id="nombre-field" value="" />
                 </div> <div class="form-group">
-                	<label for="nombre1-field">Nombre1</label>
-                	<input class="form-control" type="text" name="nombre1" id="nombre1-field" value="" />
-                </div> <div class="form-group">
-                	<label for="nombre2-field">Nombre2</label>
-                	<input class="form-control" type="text" name="nombre2" id="nombre2-field" value="" />
-                </div> <div class="form-group">
-                	<label for="apellido1-field">Apellido1</label>
-                	<input class="form-control" type="text" name="apellido1" id="apellido1-field" value="" />
-                </div> <div class="form-group">
-                	<label for="apellido2-field">Apellido2</label>
-                	<input class="form-control" type="text" name="apellido2" id="apellido2-field" value="" />
-                </div> <div class="form-group">
-                	<label for="tipo-field">Tipo</label>
-                	<input class="form-control" type="text" name="tipo" id="tipo-field" value="" />
-                </div> <div class="form-group">
-                	<label for="email-field">Email</label>
+                	<label for="email-field">Correo</label>
                 	<input class="form-control" type="text" name="email" id="email-field" value="" />
                 </div> <div class="form-group">
-                	<label for="contrasenna-field">Contrasenna</label>
-                	<input class="form-control" type="text" name="contrasenna" id="contrasenna-field" value="" />
-                </div>
-
+                	<label for="contrasena-field">Contraseña</label>
+                	<input class="form-control" type="text" name="contrasena" id="email-field" value="" />
+                </div> <div class="form-group">
+                	<label for="tipo-field">Tipo</label>
+                	<select id="tipo-field" name="tipos" class="form-control">
+                      <option value="1">Estándar</option>
+                      <option value="2">Administrador</option>
+                    </select>
+                </div> 
                 <div class="well well-sm">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    <a class="btn btn-link pull-right" href="{{ route('usuarios.index') }}"><i class="glyphicon glyphicon-backward"></i> Back</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a class="btn btn-link pull-right" href="{{ route('usuarios.index') }}"><i class="glyphicon glyphicon-backward"></i> Atrás</a>
                 </div>
             </form>
 

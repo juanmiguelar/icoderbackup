@@ -21,11 +21,6 @@
                     </div>
                 <div class="row">
                     <div class="form-group col-md-1">
-                        @if(Session::has('message'))
-                            <div class="alert-box success">
-                                {{ Session::get('message') }}
-                            </div>
-                        @endif
                 	    <label for="anno-field">Año</label>
                             <select  class="selectpicker form-control" id="anno-field" name="anno" required>
                                 @for ($i = $anno-10 ; $i < $anno+10 ; $i++)
