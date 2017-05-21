@@ -67,8 +67,18 @@ class EdicionController extends Controller
 			
 			return redirect()->back()->withErrors([ 'Ya existe una edición para este año, por favor verifique el año']);
 			
+		}elseif(strtotime($request->input("fecha_fin")) < strtotime($request->input("fecha_inicio"))){
+			
+			return redirect()->back()->withErrors([ 'La fecha de finalización debe ser posterior a la fecha de inicio']);
+			
+		}elseif(strtotime($request->input("fecha_inscripcion")) > strtotime($request->input("fecha_inicio"))){
+			
+			return redirect()->back()->withErrors([ 'La fecha de inicial de inscripción debe ser previa a la fecha de inicio']);
+			
+		}elseif (strtotime($request->input("fecha_fin_inscripcion")) < strtotime($request->input("fecha_inscripcion"))){ 
+			
+			return redirect()->back()->withErrors([ 'La fecha de final de inscrición debe ser posterior a la fecha de inicial de inscripción']);
 		}else{
-		
 		$edicion = new Edicion();
 		
 		$edicion->lugar = $request->input("lugar");
@@ -82,6 +92,7 @@ class EdicionController extends Controller
 		edicion:: insertarEdicion($edicion, $userid);
 			return redirect()->route('edicions.index');
 		}
+
 	}
 
 	/**

@@ -27,8 +27,8 @@
                 </div> <div class="form-group">
                 	<label for="tipo-field">Tipo</label>
                 	<select id="tipo-field" name="tipos" class="form-control">
-                      <option value="1">Estándar</option>
-                      <option value="2">Administrador</option>
+                      <option value="estandar">Estándar</option>
+                      <option value="admin">Administrador</option>
                     </select>
                 </div> 
                 <div class="well well-sm">

@@ -1,7 +1,7 @@
 @extends(Auth::user()->tipo)
 @section('header')
     <div class="page-header">
-        <h3><i class="glyphicon glyphicon-plus"></i> Editar Privilegios: {{$usuario[0]->name}}</h3>
+        <h3><i class="glyphicon glyphicon-plus"></i> Editar Privilegios: {{$usuario->name}}</h3>
     </div>
 @endsection
 
@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-12">
 
-        <form action="{{URL::to('/') }}/store_editar_privilegio/{id}" method="POST">
+        <form action="{{URL::to('/') }}/store_editar_privilegio/{{$usuario->id}}" method="GET">
      <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
     <div class="form-group">
@@ -19,10 +19,9 @@
 	 <div class="row">
 	        <div class="col-xs-6 col-sm-3">
                 <div class="tipo">
-                    <select   class="selectpicker form-control" id="tipo-field" name="tipo" required>
-                            <option value="Estandar">Estandar</option>
-                            <option value="Administrador">Administrador</option>
-                            <option value="Super">Super Administrador</option>
+                    <select class="selectpicker form-control" id="tipo" name="tipo" required>
+                            <option value="estandar">Estandar</option>
+                            <option value="admin">Administrador</option>
                     </select>
                 </div>
             </div>

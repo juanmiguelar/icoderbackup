@@ -2,8 +2,8 @@
     <div class="ui icon error message">
       <i class="remove icon"></i>
       <div class="content">
-        <div class="header">There were some problems with your input.</div>
-        <p>Fix the issues listed below before trying again.</p>
+        <div class="header">Hay errores con su solicitud.</div>
+        <p>Solucione los errores listados a continuación e intente de nuevo.</p>
         <ul class="list">
           @foreach ($errors->all() as $error)
               <li><i class="remove icon"></i> {{ $error }}</li>

@@ -38,12 +38,17 @@ class User extends Authenticatable
     public static function showUsers() {
          
        $users = User::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
-		
        return $users;
     }
+    
+     public static function editarPrivilegio($usuario) {
+        \DB::table('users')
+            ->where('id', $usuario->id)
+            ->update(['tipo' => $usuario->tipo,'active_flag'=> 1,'updated_at' => date('Y-m-d H:i:s')]);
+    }
       
-    public static function validarEmail($email){
-      echo $table;
-      return false;
+    public function validarEmail($email){
+      $cantidad = User::where('email', $email)->count();
+      return $cantidad == 0;
     }
 }

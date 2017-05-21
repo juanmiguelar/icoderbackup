@@ -10,6 +10,7 @@ use Auth;
 
 use App\Usuario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use \Session;
 
 class UsuarioController extends Controller
@@ -62,27 +63,35 @@ class UsuarioController extends Controller
 	 */
 	public function store(Request $request, User $user)
 	{
-		$verify = User::validarEmail($request->input("email"));
+		// Valido si el correo ya esta en el sistema
+		$verify = $user->validarEmail($request->input("email"));
 		
+		// Si no se encuentra en el sistema
 		if ($verify) {
-			// \Flash::error('El correo digitado ya se encuentra en uso, intente con uno nuevo');
-			return redirect('usuarios/create')-back()->withErrors(['Ya existe ese correo']);
-		} else {
-			 $this->validate($request, [
+			
+			// Valido los campos
+			$this->validate($request, [
 		 	'nombre' => 'required',
         	'email' => 'required',
-        	'contrasena' => 'required',
+        	'contrasena' => 'required'
     		]);
     		
+    		// Creo el usuario
 			$user = new User();
 			$user->name = $request->input("nombre");
 	        $user->email = $request->input("email");
 	        $user->password = $request->input("contrasena");
 	        $user->tipo = $request->input("tipo");
 	        $user->id_canton = 1;
+	        
+	        // Lo guardo
 			$user->save();
 			// \Flash::message('Usuario ingresado con éxito');
 			return redirect('usuarios');
+			
+		} else {
+			// \Flash::error('El correo digitado ya se encuentra en uso, intente con uno nuevo');
+			return redirect()->back()->withErrors(['El correo "'. $request->input("email") .'" ya esta registrado.']); 
 		}
 	}
 
@@ -184,35 +193,26 @@ class UsuarioController extends Controller
 	 * Update the specified resource in storage.
 	 *
 	 * @param  int  $id
-	 * @param Request $request
 	 * @return Response
 	 */
 	public function showEditarPrivilegio($id)
 	{
 		$usuario = User::showUser($id);
-		echo $usuario;
 		return view('usuarios.editarPrivilegios', compact('usuario'));
 	}
 	public function editarPrivilegio($id)
 	{
-
-		$usuario->name = ucfirst($request->input("name"));
-    	$usuario->slug = str_slug($request->input("name"), "-");
-		$usuario->description = ucfirst($request->input("description"));
+		$usuario = new User();
+		$usuario->id = $id;
+		$usuario->tipo = $_GET['tipo'];
 		$usuario->active_flag = 1;//change to reflect current status or changed status
-		$usuario->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:usuarios,name,' . $usuario->id,
-					 'description' => 'required'
-			 ]);
-
-		$usuario->save();
-
+		
+		User::editarPrivilegio($usuario);
+		
 		Session::flash('message_type', 'blue');
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Usuario \"<a href='usuarios/$usuario->slug'>" . $usuario->name . "</a>\" was Updated.");
+		Session::flash('message', 'Los privilegios se han actualizado.');
 
 		return redirect()->route('usuarios.index');
 	}

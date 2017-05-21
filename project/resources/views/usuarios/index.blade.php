@@ -17,7 +17,7 @@
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
-                            <th>Name</th>
+                            <th>Nombre</th>
                             <th>Email</th>
                             <th>Tipo</th> 
                             <th class="text-right">Opciones</th>
@@ -33,7 +33,7 @@
                                 
                                 <td class="text-right">
                                     
-                                    <a class="btn btn-xs btn-warning" href="{{URL::to('/') }}/editar_privilegio/{$usuario->id}">
+                                    <a class="btn btn-xs btn-warning" href="{{URL::to('/') }}/editar_privilegio/{{$usuario->id}}">
                                         <i class="glyphicon glyphicon-edit"></i> Editar Privilegio
                                     </a>
                                     
