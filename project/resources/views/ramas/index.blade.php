@@ -1,10 +1,10 @@
-@extends('layout')
+@extends(Auth::user()->tipo)
 
 @section('header')
     <div class="page-header clearfix">
         <h1>
-            <i class="glyphicon glyphicon-align-justify"></i> Rama
-            <a class="btn btn-success pull-right" href="{{ route('ramas.create') }}"><i class="glyphicon glyphicon-plus"></i> Create</a>
+            <i class="glyphicon glyphicon-align-justify"></i> Ramas
+            <a class="btn btn-success pull-right" href="{{ route('ramas.create') }}"><i class="glyphicon glyphicon-plus"></i> Crear</a>
         </h1>
     </div>
 @endsection

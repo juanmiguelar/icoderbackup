@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\User;
+use App\Canton;
 use Auth;
 
 use App\Usuario;
@@ -52,7 +53,10 @@ class UsuarioController extends Controller
 	 */
 	public function create()
 	{
-		return view('usuarios.create');
+		
+		$cantones = Canton::all();
+		
+		return view('usuarios.create', compact('cantones'));
 	}
 
 	/**
@@ -80,12 +84,13 @@ class UsuarioController extends Controller
 			$user = new User();
 			$user->name = $request->input("nombre");
 	        $user->email = $request->input("email");
-	        $user->password = $request->input("contrasena");
-	        $user->tipo = $request->input("tipo");
-	        $user->id_canton = 1;
+	        $user->password = bcrypt($request->input("contrasena"));
+	        $user->tipo = $request->input("tipos");
+	        $user->id_canton = $request->input("cantones");
 	        
 	        // Lo guardo
 			$user->save();
+			
 			// \Flash::message('Usuario ingresado con éxito');
 			return redirect('usuarios');
 			

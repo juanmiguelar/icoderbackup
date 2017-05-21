@@ -113,10 +113,9 @@ class EdicionController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit(Edicion $edicion)
+	public function edit($anno)
 	{
-		//$edicion = $this->model->findOrFail($id);
-
+		$edicion = Edicion::showEdicion($anno);
 		return view('edicions.edit', compact('edicion'));
 	}
 
@@ -127,7 +126,7 @@ class EdicionController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function update(Request $request, Edicion $edicion, User $user)
+	public function update($anno)
 	{
 
 		$edicion->name = ucfirst($request->input("name"));

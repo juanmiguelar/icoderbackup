@@ -38,7 +38,7 @@ class RamaController extends Controller
 	 */
 	public function index()
 	{
-		$ramas = Rama::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+		$ramas = Rama::showRamas();
 		$active = Rama::where('active_flag', 1);
 		return view('ramas.index', compact('ramas', 'active'));
 	}

@@ -31,6 +31,16 @@
                       <option value="admin">Administrador</option>
                     </select>
                 </div> 
+                <div class="form-group">
+                	<label for="canton-field">Tipo</label>
+                	<select id="canton-field" name="tipos" class="form-control">
+                	    
+                	    @foreach($cantones as $canton)
+                	        <option value="{{ $canton->id_canton }}">{{ $canton->nombre }}</option>
+                        @endforeach
+
+                    </select>
+                </div> 
                 <div class="well well-sm">
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     <a class="btn btn-link pull-right" href="{{ route('usuarios.index') }}"><i class="glyphicon glyphicon-backward"></i> Atrás</a>

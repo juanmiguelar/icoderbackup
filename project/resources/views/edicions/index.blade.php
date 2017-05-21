@@ -34,7 +34,7 @@
                                         <i class="glyphicon glyphicon-eye-open"></i> Ver
                                     </a>
                                     
-                                    <a class="btn btn-xs btn-warning" href="{{ route('edicions.edit', $edicion->id) }}">
+                                    <a class="btn btn-xs btn-warning" href="{{ route('edicions.edit', $edicion->anno) }}">
                                         <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 

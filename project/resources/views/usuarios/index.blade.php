@@ -41,7 +41,7 @@
                                         <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 
-                                    <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
+                                    <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Seguro de eliminar?');">
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="DELETE">
 

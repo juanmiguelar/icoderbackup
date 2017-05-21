@@ -9,14 +9,9 @@ class Canton extends Model
     protected $fillable = ['nombre'];
     
     public static function obtenerCantones() {
-     
         $lista_cantones =  Canton::where('active_flag', 1)->orderBy('id_canton', 'desc')->paginate(10);
-        
         return $lista_cantones;     
-       
     }
-    
-   
 }
    // $cantones = Array();
 
