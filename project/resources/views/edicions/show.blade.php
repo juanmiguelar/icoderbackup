@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="page-header">
-        <h1>Edicion {{$edicion->anno}}</h1>
+        <h1>Edición {{$edicion->anno}}</h1>
     </div>
 @endsection
 
@@ -25,7 +25,7 @@
             <table class="table table-condensed table-striped">
                     <thead>
                         <tr>
-                            <th class="text-center">#</th>
+                            <th class="text-center">Año</th>
                             <th>Lugar</th>
                             <th>Fecha Inicio</th> 
                             <th>Fecha Fin</th> 
@@ -37,7 +37,7 @@
                     <tbody>
                        
                             <tr>
-                                <td class="text-center"><strong>{{$edicion->id}}</strong></td>
+                                <td class="text-center"><strong>{{$edicion->anno}}</strong></td>
                                 <td>{{$edicion->lugar}}</td>
                                 <td>{{$edicion->fecha_inicio}}</td> 
                                 <td>{{$edicion->fecha_fin}}</td> 

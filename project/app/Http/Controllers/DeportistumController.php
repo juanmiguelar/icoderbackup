@@ -36,14 +36,9 @@ class DeportistumController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function index($deporte = "none")
+	public function index()
 	{
-		if ($deporte == "none") {
-			$deportistas = Deportistum::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
-		}else{
-			
-		}
-		
+		$deportistas = Deportistum::show();
 		return view('deportistas.index', compact('deportistas', 'active'));
 	}
 

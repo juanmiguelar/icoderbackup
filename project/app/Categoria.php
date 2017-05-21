@@ -19,5 +19,11 @@ class Categoria extends Model
        return $categoria;
       }
     
+    public static function showCategorias() {
+         
+       $categorias = Categoria::where('active_flag', 1)->orderBy('id_categoria', 'desc')->paginate(10);
+		
+       return $categorias;
+      }
      
 }

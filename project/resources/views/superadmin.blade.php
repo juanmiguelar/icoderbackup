@@ -72,16 +72,18 @@
                     <li class="dropdown">
                         
                         <!-- Mantenimiento -->
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mantenimiento
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Mantenimientos
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ route('edicions.index') }}">Ediciones</a></li>
                             <li><a href="{{ route('deportes.index') }}">Deportes</a></li>
                             <li><a href="{{ route('categorias.index') }}">Categorías</a></li>
+                            <li><a href="{{ route('ramas.index') }}">Ramas</a></li>
+                            <li><a href="{{ route('pruebas.index') }}">Pruebas</a></li>
                             <li><a href="{{ route('provincias.index') }}">Provincias</a></li>
                             <li><a href="{{ route('cantons.index') }}">Cantones</a></li>
                             <li><a href="{{ route('personas.index') }}">Personas</a></li>
-                            <li><a href="{{ route('usuarios.index') }}">Privilegios Usuarios</a></li>
+                            <li><a href="{{ route('usuarios.index') }}">Usuarios</a></li>
                         </ul>
                     </li>
                     <li><a href="#">Inscripciones</a></li>

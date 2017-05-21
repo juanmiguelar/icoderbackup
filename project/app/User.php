@@ -33,4 +33,19 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    
+     public static function showUser($id) {
+         
+       $user =  User::where('id', $id)->first();
+    
+       return $user;
+      }
+    
+    public static function showUsers() {
+         
+       $users = User::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+		
+       return $users;
+      }
 }

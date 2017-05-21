@@ -16,7 +16,6 @@
                 <table class="table table-condensed table-striped">
                     <thead>
                         <tr>
-                            <th class="text-center">#</th>
                             <th>Lugar</th>
                             <th>Año</th>
                             <th class="text-right">Opciones</th>
@@ -26,13 +25,12 @@
                     <tbody>
                         @foreach($edicions as $edicion)
                             <tr>
-                                <td class="text-center"><strong>{{$edicion->id}}</strong></td>
-
+                                
                                 <td>{{$edicion->lugar}}</td> 
                                 <td>{{$edicion->anno}}</td> 
                                 
                                 <td class="text-right">
-                                    <a class="btn btn-xs btn-primary" href="{{ route('edicions.show', $edicion->id) }}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('edicions.show', $edicion->anno) }}">
                                         <i class="glyphicon glyphicon-eye-open"></i> Ver
                                     </a>
                                     

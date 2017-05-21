@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="page-header">
-        <h3><i class="glyphicon glyphicon-plus"></i> Ingresar Deporte</h3>
+        <h3><i class="glyphicon glyphicon-plus"></i> Editar Privilegios</h3>
     </div>
 @endsection
 
@@ -15,18 +15,15 @@
         <form action="{{ route('deportes.store') }}" method="POST">
      <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-     <div class="form-group">
-	<label for="nombre-field">Nombre</label>
-	<input class="form-control" type="text" name="nombre" id="nombre-field" value="" placeholder="Ingrese aquí el nombre del deporte"  required/>
-    </div> 
     <div class="form-group">
 	<label for="tipo-field">Tipo</label>
 	 <div class="row">
 	        <div class="col-xs-6 col-sm-3">
                 <div class="tipo">
                     <select   class="selectpicker form-control" id="tipo-field" name="tipo" required>
-                            <option value="Individual">Individual</option>
-                            <option value="Grupal">Grupal</option>
+                            <option value="Estandar">Estandar</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Super">Super Administrador</option>
                     </select>
                 </div>
             </div>

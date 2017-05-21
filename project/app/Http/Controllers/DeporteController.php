@@ -68,7 +68,6 @@ class DeporteController extends Controller
 		$deporte = new Deporte();
 		$deporte->nombre = $request->input("nombre");
 		$deporte->tipo = $request->input("tipo");
-		$deporte->numero_maximo_atletas = $request->input("numero");
 		$userid = $request->user()->id;
 		
 		Deporte:: insertarDeporte($deporte, $userid);
@@ -137,7 +136,6 @@ class DeporteController extends Controller
 		$deporte = Deporte::where( 'id_deporte' , $id)->first();
 		$deporte->nombre = $request->input("nombre");
 		$deporte->tipo = $request->input("tipo");
-		$deporte->numero_maximo_atletas = $request->input("numero");
 		$userid = $request->user()->id;
 		
 		Deporte:: editarDeporte($deporte, $userid);
@@ -180,7 +178,7 @@ class DeporteController extends Controller
 		Session::flash('message_type', 'negative');
 		Session::flash('message_icon', 'hide');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', 'El deporte ' . $deporte->nombre . ' was De-Activated.');
+		Session::flash('message', 'El deporte ' . $deporte->nombre . ' ha sido eliminado.');
 
 		
 		return redirect()->route('deportes.index');

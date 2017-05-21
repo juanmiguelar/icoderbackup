@@ -38,8 +38,9 @@ class UsuarioController extends Controller
 	 */
 	public function index()
 	{
-		$usuarios = Usuario::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
-		$active = Usuario::where('active_flag', 1);
+		$usuarios = User::showUsers();
+		$active = User::where('active_flag', 1);
+		
 		return view('usuarios.index', compact('usuarios', 'active'));
 	}
 
@@ -179,5 +180,38 @@ class UsuarioController extends Controller
 
 		return redirect()->route('usuarios.index');
 	}
-	
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  int  $id
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function showEditarPrivilegio($id)
+	{
+		return view('usuarios.editarPrivilegios');
+	}
+	public function editarPrivilegio($id)
+	{
+
+		$usuario->name = ucfirst($request->input("name"));
+    	$usuario->slug = str_slug($request->input("name"), "-");
+		$usuario->description = ucfirst($request->input("description"));
+		$usuario->active_flag = 1;//change to reflect current status or changed status
+		$usuario->author_id = $request->user()->id;
+
+		$this->validate($request, [
+					 'name' => 'required|max:255|unique:usuarios,name,' . $usuario->id,
+					 'description' => 'required'
+			 ]);
+
+		$usuario->save();
+
+		Session::flash('message_type', 'blue');
+		Session::flash('message_icon', 'checkmark');
+		Session::flash('message_header', 'Success');
+		Session::flash('message', "The Usuario \"<a href='usuarios/$usuario->slug'>" . $usuario->name . "</a>\" was Updated.");
+
+		return redirect()->route('usuarios.index');
+	}
 }

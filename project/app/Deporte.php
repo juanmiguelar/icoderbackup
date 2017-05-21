@@ -16,12 +16,20 @@ class Deporte extends Model
         }
         
     public static function insertarDeporte($deporte, $userid){
-      \DB::table ('deportes')->insert(['nombre' => $deporte->nombre, 'tipo' => $deporte->tipo, 'numero_maximo_atletas' => $deporte->numero_maximo_atletas, 'active_flag'=> 1, 'author_id' => $userid, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
+      \DB::table ('deportes')->insert(['nombre' => $deporte->nombre, 'tipo' => $deporte->tipo, 'active_flag'=> 1, 'author_id' => $userid, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
     }
     
     public static function editarDeporte($deporte, $userid){
        \DB::table('deportes')
             ->where('id_deporte', $deporte->id_deporte)
-            ->update(['nombre' => $deporte->nombre, 'tipo' => $deporte->tipo, 'numero_maximo_atletas' => $deporte->numero_maximo_atletas, 'active_flag'=> 1, 'author_id' => $userid, 'updated_at' => date('Y-m-d H:i:s')]);
+            ->update(['nombre' => $deporte->nombre, 'tipo' => $deporte->tipo,'active_flag'=> 1, 'author_id' => $userid, 'updated_at' => date('Y-m-d H:i:s')]);
       }
+      
+      public static function showDeportes() {
+         
+       $deportes = Deporte::where('active_flag', 1)->orderBy('id_deporte', 'desc')->paginate(10);
+		
+       return $deportes;
+      }
+    
 }

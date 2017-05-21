@@ -27,7 +27,7 @@
                             <tr>
                                 <td class="text-center"><strong>{{$provincium->id_provincia}}</strong></td>
 
-                                <td>{{$provincium->nombre_provincia}}</td>
+                                <td>{{$provincium->nombre}}</td>
                                 
                                 <td class="text-right">
                                     

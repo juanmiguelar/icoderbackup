@@ -62,9 +62,16 @@ class EdicionController extends Controller
 	 */
 	public function store(Request $request, User $user)
 	{
+		if (edicion:: comprobarAnno($request->input("anno")) == "0"){
+			
+		return view('edicions.show')->withMessage("Ya existe una edición para este año, por favor verifique el año");
+			
+		}else{
+		
 		$edicion = new Edicion();
 		
 		$edicion->lugar = $request->input("lugar");
+		$edicion->anno = $request->input("anno");
 		$edicion->fecha_inicio = $request->input("fecha_inicio");
 		$edicion->fecha_fin = $request->input("fecha_fin");
 		$edicion->fecha_inscripcion = $request->input("fecha_inscripcion");
@@ -72,27 +79,8 @@ class EdicionController extends Controller
 		$userid = $request->user()->id;
 		
 		edicion:: insertarEdicion($edicion, $userid);
-		
-
-		// $edicion->name = ucfirst($request->input("name"));
-		// $edicion->slug = str_slug($request->input("name"), "-");
-		// $edicion->description = ucfirst($request->input("description"));
-		// $edicion->active_flag = 1;
-		// $edicion->author_id = $request->user()->id;
-
-		// $this->validate($request, [
-		// 			 'name' => 'required|max:255|unique:edicions',
-		// 			 'description' => 'required'
-		// 	 ]);
-
-		// $edicion->save();
-
-		// Session::flash('message_type', 'success');
-		// Session::flash('message_icon', 'checkmark');
-		// Session::flash('message_header', 'Success');
-		// Session::flash('message', "The Edicion \"<a href='edicions/$edicion->slug'>" . $edicion->name . "</a>\" was Created.");
-
-		return redirect()->route('edicions.index');
+			return redirect()->route('edicions.index');
+		}
 	}
 
 	/**
@@ -101,10 +89,9 @@ class EdicionController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Edicion $edicion)
+	public function show($anno)
 	{
-		//$edicion = $this->model->findOrFail($id);
-
+		$edicion = Edicion::showEdicion($anno);
 		return view('edicions.show', compact('edicion'));
 	}
 

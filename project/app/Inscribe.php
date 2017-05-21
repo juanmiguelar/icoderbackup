@@ -10,5 +10,5 @@ class Inscribe extends Model
 
     public function Author(){
       return $this->belongsTo('App\User','author_id');
-        }
+    }
 }

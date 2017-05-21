@@ -121,7 +121,7 @@ class InscripcionController extends Controller
 	{
 
 		$inscripcion->name = ucfirst($request->input("name"));
-    $inscripcion->slug = str_slug($request->input("name"), "-");
+    	$inscripcion->slug = str_slug($request->input("name"), "-");
 		$inscripcion->description = ucfirst($request->input("description"));
 		$inscripcion->active_flag = 1;//change to reflect current status or changed status
 		$inscripcion->author_id = $request->user()->id;

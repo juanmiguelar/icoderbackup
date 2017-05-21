@@ -25,23 +25,9 @@
                 	        <div class="col-xs-6 col-sm-3">
                                 <div class="tipo">
                                     <select   class="selectpicker form-control" id="tipo-field" name="tipo" required>
+                                        <!--arreglar-->
                                             <option value="Individual" {{ $deporte->tipo == "Individual" ? 'selected' : '' }}>Individual</option>
                                             <option value="Grupal" {{ $deporte->tipo == "Grupal" ? 'selected' : '' }}>Grupal</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     <div class="form-group">
-                	    <label for="numero_maximo_atletas-field">Número máximo de atletas</label>
-                	    <div class="row">
-                	        <div class="col-md-1">
-                                <div class="numero_maximo_atletas">
-                                    <select class="selectpicker form-control" id="numero_maximo_atletas-field" name="numero" required>
-                                        @for ($i = 1; $i < 51; $i++)
-                                           <option value= "{{ $i }}" {{ $deporte->numero_maximo_atletas == $i ? 'selected' : '' }}>{{$i}}</option> 
-                                            
-                                        @endfor
                                     </select>
                                 </div>
                             </div>

@@ -2,10 +2,10 @@
 
 @section('header')
     <div class="page-header clearfix">
-        <h1>
-            <i class="glyphicon glyphicon-align-justify"></i> Usuario
-            <a class="btn btn-success pull-right" href="{{ route('usuarios.create') }}"><i class="glyphicon glyphicon-plus"></i> Create</a>
-        </h1>
+        <h3>
+            <i class="glyphicon glyphicon-align-justify"></i> Usuarios
+            <a class="btn btn-success pull-right" href="{{ route('usuarios.create') }}"><i class="glyphicon glyphicon-plus"></i> Crear</a>
+        </h3>
     </div>
 @endsection
 
@@ -17,8 +17,10 @@
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
-                            <th>Cedula_usuario</th> <th>Nombre1</th> <th>Nombre2</th> <th>Apellido1</th> <th>Apellido2</th> <th>Tipo</th> <th>Email</th> <th>Contrasenna</th>
-                            <th class="text-right">OPTIONS</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Tipo</th> 
+                            <th class="text-right">Opciones</th>
                         </tr>
                     </thead>
 
@@ -27,22 +29,23 @@
                             <tr>
                                 <td class="text-center"><strong>{{$usuario->id}}</strong></td>
 
-                                <td>{{$usuario->cedula_usuario}}</td> <td>{{$usuario->nombre1}}</td> <td>{{$usuario->nombre2}}</td> <td>{{$usuario->apellido1}}</td> <td>{{$usuario->apellido2}}</td> <td>{{$usuario->tipo}}</td> <td>{{$usuario->email}}</td> <td>{{$usuario->contrasenna}}</td>
+                                <td>{{$usuario->name}}</td> <td>{{$usuario->email}}</td> <td>{{$usuario->tipo}}</td>
                                 
                                 <td class="text-right">
-                                    <a class="btn btn-xs btn-primary" href="{{ route('usuarios.show', $usuario->id) }}">
-                                        <i class="glyphicon glyphicon-eye-open"></i> View
+                                    
+                                    <a class="btn btn-xs btn-warning" href="{{URL::to('/') }}/editar_privilegio/{$usuario->id}">
+                                        <i class="glyphicon glyphicon-edit"></i> Editar Privilegio
                                     </a>
                                     
                                     <a class="btn btn-xs btn-warning" href="{{ route('usuarios.edit', $usuario->id) }}">
-                                        <i class="glyphicon glyphicon-edit"></i> Edit
+                                        <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 
                                     <form action="{{ route('usuarios.destroy', $usuario->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="DELETE">
 
-                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
+                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
                                     </form>
                                 </td>
                             </tr>
@@ -51,7 +54,7 @@
                 </table>
                 {!! $usuarios->render() !!}
             @else
-                <h3 class="text-center alert alert-info">Empty!</h3>
+                <h3 class="text-center alert alert-info">No hay usuarios registrados</h3>
             @endif
 
         </div>

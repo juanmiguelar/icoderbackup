@@ -16,4 +16,8 @@ class Deportistum extends Model
     public function insertarDeporte($deporte){
             \DB::table ('deportes')->insert(['id_deporte' => $deporte->cedula_persona, 'nombre1' => $deporte->nombre1, 'nombre2' => $deporte->nombre2, 'apellido1' => $deporte->apellido1, 'apellido2'=> $deporte->apellido2,  'fecha_nacimiento' => $deporte->fecha_nacimiento, 'nacionalidad' => $deporte->nacionalidad, 'telefono' => $deporte->telefono, 'direccion' => $deporte->direccion, 'estatura' => $deporte->estatura, 'peso' => $deporte->peso, 'tipo_sangre' => $deporte->tipo_sangre, 'tipo' => $deporte->tipo, 'email' => $deporte->email, 'cedula_frente' => $deporte->cedula_frente, 'cedula_atras' => $deporte->cedula_atras, 'boleta_inscripcion' => $deporte->boleta_inscripcion]);
     }
+    
+    public static function show(){
+      return Deportistum::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+    }
 }

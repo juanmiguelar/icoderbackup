@@ -31,9 +31,7 @@ Route::resource("ramas","RamaController");
 /*DEPORTES*/
 Route::resource("deportes","DeporteController");
 
-Route::get("ver_deporte/{id_deporte}", array("as"=>"dashboard","uses"=>"DeporteController@show"));
 Route::post("ingresar_deporte/", array("as"=>"dashboard","uses"=>"DeporteController@ingresar_deporte"));
-
 
 /* Fijo aqui estan declaradas las routes del login y registro */
 Auth::routes();
@@ -47,6 +45,9 @@ Route::post("agregarPersona/{cedula_persona}/{nombre1}/{nombre2}/{apellido1}/{ap
 
 //EDICIONES
 Route::post("nueva_edicion/", array("as"=>"dashboard","uses"=>"EdicionController@store"));
+
+//USUARIO
+Route::get("editar_privilegio/{id}", array("as"=>"dashboard","uses"=>"UsuarioController@showEditarPrivilegio"));
 
 //RUTA
 //Route::get("usuarios_equipos/{correo}", array("as"=>"dashboard","uses"=>"UsuarioController@mostrarEquiposRelacionados"));

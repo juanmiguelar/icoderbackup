@@ -9,6 +9,8 @@ use App\User;
 use Auth;
 
 use App\Categoria;
+use App\Deporte;
+
 use Illuminate\Http\Request;
 use \Session;
 
@@ -38,9 +40,10 @@ class CategoriaController extends Controller
 	 */
 	public function index()
 	{
-		$categorias = Categoria::where('active_flag', 1)->orderBy('id_categoria', 'desc')->paginate(10);
+		$categorias = Categoria::showCategorias();
+		$deportes = Deporte::showDeportes();
 		$active = Categoria::where('active_flag', 1);
-		return view('categorias.index', compact('categorias', 'active'));
+		return view('categorias.index', compact('categorias','deportes', 'active'));
 	}
 
 	/**
@@ -69,6 +72,8 @@ class CategoriaController extends Controller
 		$categoria->active_flag = 1;
 		$categoria->author_id = $request->user()->id;
 
+		$deporte->numero_maximo_atletas = $request->input("numero");
+		
 		$this->validate($request, [
 					 'name' => 'required|max:255|unique:categorias',
 					 'description' => 'required'
