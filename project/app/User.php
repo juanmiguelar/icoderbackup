@@ -27,6 +27,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     
+     protected $table = 'users';
+    
     
      public static function showUser($id) {
          
@@ -46,9 +48,20 @@ class User extends Authenticatable
             ->where('id', $usuario->id)
             ->update(['tipo' => $usuario->tipo,'active_flag'=> 1,'updated_at' => date('Y-m-d H:i:s')]);
     }
+    
+    public static function editarUsuario($usuario, $userid) {
+        \DB::table('users')
+            ->where('id', $usuario->id)
+            ->update(['usu_id' => $userid,'tipo' => $usuario->tipo,'name'=> $usuario->name, 'email' => $usuario->email, 'id_canton' => $usuario->id_canton,'updated_at' => date('Y-m-d H:i:s')]);
+    }
       
     public function validarEmail($email){
       $cantidad = User::where('email', $email)->count();
+      return $cantidad == 0;
+    }
+    
+        public function validarEmailUpdate($email, $id){
+      $cantidad = User::where('email', $email) ->where('id', '!=',  $id )->count();
       return $cantidad == 0;
     }
 }

@@ -8,6 +8,8 @@ class Usuario extends Model
 {
     protected $fillable = ['cedula_usuario', 'nombre1', 'nombre2', 'apellido1', 'apellido2', 'tipo', 'email', 'contrasenna'];
 
+    protected $table = 'users';
+    
     public function Author(){
       return $this->belongsTo('App\User','author_id');
     }

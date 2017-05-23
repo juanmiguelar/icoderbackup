@@ -37,11 +37,11 @@
                                                 <i class="glyphicon glyphicon-eye-open"></i> Ver
                                             </a>
                                             
-                                            <a class="btn btn-xs btn-warning" href="{{ route('categorias.edit', $categoria->id) }}">
+                                            <a class="btn btn-xs btn-warning" href="{{ route('categorias.edit', $categoria->id_categoria) }}">
                                                 <i class="glyphicon glyphicon-edit"></i> Editar
                                             </a>
         
-                                            <form action="{{ route('categorias.destroy', $categoria->id_categoria) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
+                                            <form action="{{ route('categorias.destroy', $categoria->id_categoria) }}" method="POST" style="display: inline;" onsubmit="return confirm('Está seguro de eliminar la categoría {{$categoria->nombre}}?');">
                                                 {{csrf_field()}}
                                                 <input type="hidden" name="_method" value="DELETE">
         

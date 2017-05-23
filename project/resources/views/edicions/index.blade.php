@@ -38,7 +38,7 @@
                                         <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 
-                                    <form action="{{ route('edicions.destroy', $edicion->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
+                                    <form action="{{ route('edicions.destroy', $edicion) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Seguro de eliminar?');">
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="DELETE">
 

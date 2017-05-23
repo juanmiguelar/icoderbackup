@@ -15,15 +15,18 @@
             <form action="{{ route('usuarios.store') }}" method="POST">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-                <div class="form-group">
+                <div class="form-group @if($errors->has('nombre')) has-error @endif">
                 	<label for="nombre-field">Nombre</label>
-                	<input class="form-control" type="text" name="nombre" id="nombre-field" value="" />
+                	<input class="form-control" type="text" name="nombre" id="nombre-field" value="{{ old("nombre") }}" />
+                	@if($errors->has("nombre"))
+                	    <span class="help-block">{{ $errors->first("nombre") }}</span>
+                	@endif
                 </div> <div class="form-group">
                 	<label for="email-field">Correo</label>
-                	<input class="form-control" type="text" name="email" id="email-field" value="" />
+                	<input class="form-control" type="text" name="email" id="email-field" value="{{ old("email") }}" />
                 </div> <div class="form-group">
                 	<label for="contrasena-field">Contraseña</label>
-                	<input class="form-control" type="text" name="contrasena" id="email-field" value="" />
+                	<input class="form-control" type="text" name="contrasena" id="email-field" value="{{ old("contrasena") }}" />
                 </div> <div class="form-group">
                 	<label for="tipo-field">Tipo</label>
                 	<select id="tipo-field" name="tipos" class="form-control">
@@ -32,8 +35,8 @@
                     </select>
                 </div> 
                 <div class="form-group">
-                	<label for="canton-field">Tipo</label>
-                	<select id="canton-field" name="tipos" class="form-control">
+                	<label for="canton-field">Cantón</label>
+                	<select id="canton-field" name="cantones" class="form-control">
                 	    
                 	    @foreach($cantones as $canton)
                 	        <option value="{{ $canton->id_canton }}">{{ $canton->nombre }}</option>

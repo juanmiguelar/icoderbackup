@@ -9,6 +9,8 @@ use App\User;
 use Auth;
 
 use App\Rama;
+use App\Categoria;
+use App\Deporte;
 use Illuminate\Http\Request;
 use \Session;
 
@@ -39,8 +41,10 @@ class RamaController extends Controller
 	public function index()
 	{
 		$ramas = Rama::showRamas();
+		$categorias = Categoria::showCategorias();
+		$deportes = Deporte::showDeportes();
 		$active = Rama::where('active_flag', 1);
-		return view('ramas.index', compact('ramas', 'active'));
+		return view('ramas.index', compact('ramas','categorias','deportes', 'active'));
 	}
 
 	/**

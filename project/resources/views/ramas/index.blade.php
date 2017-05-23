@@ -2,10 +2,10 @@
 
 @section('header')
     <div class="page-header clearfix">
-        <h1>
+        <h3>
             <i class="glyphicon glyphicon-align-justify"></i> Ramas
             <a class="btn btn-success pull-right" href="{{ route('ramas.create') }}"><i class="glyphicon glyphicon-plus"></i> Crear</a>
-        </h1>
+        </h3>
     </div>
 @endsection
 
@@ -16,42 +16,48 @@
                 <table class="table table-condensed table-striped">
                     <thead>
                         <tr>
-                            <th class="text-center">#</th>
-                            <th>Id_rama</th> <th>Nombre</th>
-                            <th class="text-right">OPTIONS</th>
+                            <th class="text-center">Deporte</th>
+                            <th>Categoría</th>
+                            <th>Rama</th>
+                            <th class="text-right">Opciones</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        @foreach($ramas as $rama)
-                            <tr>
-                                <td class="text-center"><strong>{{$rama->id}}</strong></td>
-
-                                <td>{{$rama->id_rama}}</td> <td>{{$rama->nombre}}</td>
-                                
-                                <td class="text-right">
-                                    <a class="btn btn-xs btn-primary" href="{{ route('ramas.show', $rama->id) }}">
-                                        <i class="glyphicon glyphicon-eye-open"></i> View
-                                    </a>
-                                    
-                                    <a class="btn btn-xs btn-warning" href="{{ route('ramas.edit', $rama->id) }}">
-                                        <i class="glyphicon glyphicon-edit"></i> Edit
-                                    </a>
-
-                                    <form action="{{ route('ramas.destroy', $rama->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
-                                        {{csrf_field()}}
-                                        <input type="hidden" name="_method" value="DELETE">
-
-                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
+                        @foreach($deportes as $deporte)
+                        @foreach($categorias as $categoria)
+                            @foreach($ramas as $rama)
+                                 @if($deporte->id_deporte == $categoria->id_deporte)
+                                    @if($categoria->id_categoria == $rama->id_categoria)
+                                            <tr>
+                                                <td class="text-center">{{$deporte->nombre}}</td>
+                                                
+                                                <td>{{$categoria->nombre}}</td>
+                                                <td><strong>{{$rama->nombre}}</strong></td>
+                                                
+                                                <td class="text-right">
+                                                    
+                                                    <a class="btn btn-xs btn-warning" href="{{ route('ramas.edit', $rama->id) }}">
+                                                        <i class="glyphicon glyphicon-edit"></i> Editar
+                                                    </a>
+                
+                                                    <form action="{{ route('ramas.destroy', $rama->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
+                                                        {{csrf_field()}}
+                                                        <input type="hidden" name="_method" value="DELETE">
+                
+                                                        <button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endif
+                                @endforeach    
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
                 {!! $ramas->render() !!}
             @else
-                <h3 class="text-center alert alert-info">Empty!</h3>
+                <h3 class="text-center alert alert-info">No hay ramas registrada</h3>
             @endif
 
         </div>

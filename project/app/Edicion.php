@@ -25,10 +25,19 @@ class Edicion extends Model
         return $edicion;
       }
     
+        public static function editarEdicion($edicion, $userid){
+       \DB::table('edicions')
+            ->where('anno', $edicion->anno)
+            ->update(['lugar' => $edicion->lugar, 'fecha_inicio' =>  date('Y-m-d', strtotime($edicion->fecha_inicio)), 'fecha_fin' => date('Y-m-d', strtotime($edicion->fecha_fin)), 'fecha_inscripcion' => date('Y-m-d', strtotime($edicion->fecha_inscripcion)), 'fecha_fin_inscripcion' => date('Y-m-d', strtotime($edicion->fecha_fin_inscripcion)), 'author_id' => $userid, 'updated_at' => date('Y-m-d H:i:s')]);
+      }
     
     public static function showEdicion($anno) {
          
        $edicion =  Edicion::where('anno', $anno)->first();
+       $edicion->fecha_inicio = date('m/d/Y', strtotime($edicion->fecha_inicio));
+       $edicion->fecha_fin = date('m/d/Y', strtotime($edicion->fecha_fin));
+       $edicion->fecha_inscripcion = date('m/d/Y', strtotime($edicion->fecha_inscripcion));
+       $edicion->fecha_fin_inscripcion = date('m/d/Y', strtotime($edicion->fecha_fin_inscripcion));
     
        return $edicion;
       }

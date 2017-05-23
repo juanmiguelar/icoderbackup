@@ -67,37 +67,31 @@ class UsuarioController extends Controller
 	 */
 	public function store(Request $request, User $user)
 	{
-		// Valido si el correo ya esta en el sistema
-		$verify = $user->validarEmail($request->input("email"));
-		
-		// Si no se encuentra en el sistema
-		if ($verify) {
-			
-			// Valido los campos
-			$this->validate($request, [
+		// Verifica que el nombre no este vacio
+		// Que el email sea unico en la base de datos
+		// Que la contraseña no este vacia.
+		$this->validate($request, [
 		 	'nombre' => 'required',
-        	'email' => 'required',
+        	'email' => 'required|email|unique:users',
         	'contrasena' => 'required'
     		]);
     		
-    		// Creo el usuario
-			$user = new User();
-			$user->name = $request->input("nombre");
-	        $user->email = $request->input("email");
-	        $user->password = bcrypt($request->input("contrasena"));
-	        $user->tipo = $request->input("tipos");
-	        $user->id_canton = $request->input("cantones");
-	        
-	        // Lo guardo
-			$user->save();
-			
-			// \Flash::message('Usuario ingresado con éxito');
-			return redirect('usuarios');
-			
-		} else {
-			// \Flash::error('El correo digitado ya se encuentra en uso, intente con uno nuevo');
-			return redirect()->back()->withErrors(['El correo "'. $request->input("email") .'" ya esta registrado.']); 
-		}
+    	$user = new User();
+		$user->name = $request->input("nombre");
+	    $user->email = $request->input("email");
+		$user->password = bcrypt($request->input("contrasena"));
+	    $user->tipo = $request->input("tipos");
+	    $user->id_canton = $request->input("cantones");
+	    
+	    $user->save();
+		
+		Session::flash('message_type', 'blue');
+		Session::flash('message_icon', 'checkmark');
+		Session::flash('message_header', 'Success');
+		Session::flash('message', 'Usuario ingresado con éxito.');
+		
+		return redirect('usuarios');
+		
 	}
 
 	/**
@@ -122,8 +116,9 @@ class UsuarioController extends Controller
 	public function edit(Usuario $usuario)
 	{
 		//$usuario = $this->model->findOrFail($id);
+		$cantones = Canton::all();
 
-		return view('usuarios.edit', compact('usuario'));
+		return view('usuarios.edit', compact('usuario','cantones'));
 	}
 
 	/**
@@ -135,26 +130,26 @@ class UsuarioController extends Controller
 	 */
 	public function update(Request $request, Usuario $usuario, User $user)
 	{
+	$verify = $user->validarEmailUpdate($request->input("email"), $usuario->id);
 
-		$usuario->name = ucfirst($request->input("name"));
-    	$usuario->slug = str_slug($request->input("name"), "-");
-		$usuario->description = ucfirst($request->input("description"));
-		$usuario->active_flag = 1;//change to reflect current status or changed status
-		$usuario->author_id = $request->user()->id;
+	if ($verify) {
+			
+			$user = new User();
+			$user->id = $usuario->id;
+			$user->name = $request->input("nombre");
+	        $user->email = $request->input("email");
+	        $user->tipo = $request->input("tipos");
+	        $user->id_canton = $request->input("cantones");
+	        $userid = $request->user()->id;
 
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:usuarios,name,' . $usuario->id,
-					 'description' => 'required'
-			 ]);
-
-		$usuario->save();
-
-		Session::flash('message_type', 'blue');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Usuario \"<a href='usuarios/$usuario->slug'>" . $usuario->name . "</a>\" was Updated.");
-
-		return redirect()->route('usuarios.index');
+			User::editarUsuario($user, $userid);
+			
+			
+			return redirect('usuarios');
+			
+		} else {
+			return redirect()->back()->withErrors(['El correo "'. $request->input("email") .'" ya esta registrado.']); 
+		}
 	}
 
 	/**
@@ -215,9 +210,12 @@ class UsuarioController extends Controller
 		User::editarPrivilegio($usuario);
 		
 		Session::flash('message_type', 'blue');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
+		Session::flash('message_header', 'alert-danger');
 		Session::flash('message', 'Los privilegios se han actualizado.');
+		
+		
+		//EN la vista->@include('flash::message')
+		// \Flash::message('Se actualizó el privilegio del Usuario');
 
 		return redirect()->route('usuarios.index');
 	}

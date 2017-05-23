@@ -9,6 +9,9 @@ use App\User;
 use Auth;
 
 use App\Prueba;
+use App\Categoria;
+use App\Deporte;
+
 use Illuminate\Http\Request;
 use \Session;
 
@@ -38,9 +41,12 @@ class PruebaController extends Controller
 	 */
 	public function index()
 	{
-		$pruebas = Prueba::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
+		$pruebas = Prueba::showPruebas();
+		$categorias = Categoria::showCategorias();
+		$deportes = Deporte::showDeportes();
+		
 		$active = Prueba::where('active_flag', 1);
-		return view('pruebas.index', compact('pruebas', 'active'));
+		return view('pruebas.index', compact('pruebas','categorias','deportes', 'active'));
 	}
 
 	/**

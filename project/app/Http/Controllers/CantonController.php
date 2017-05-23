@@ -53,7 +53,8 @@ class CantonController extends Controller
 	 */
 	public function create()
 	{
-		return view('cantons.create');
+		$provincias = Provincium::obtenerProvincias();
+		return view('cantons.create', compact('provincias'));
 	}
 
 	/**
@@ -66,15 +67,11 @@ class CantonController extends Controller
 	{
 		$canton = new Canton();
 
-		$canton->name = ucfirst($request->input("name"));
-		$canton->slug = str_slug($request->input("name"), "-");
-		$canton->description = ucfirst($request->input("description"));
+		$canton->nombre = $request->input("description");
 		$canton->active_flag = 1;
-		$canton->author_id = $request->user()->id;
-
+		
 		$this->validate($request, [
-					 'name' => 'required|max:255|unique:cantons',
-					 'description' => 'required'
+					 'nombre' => 'required'
 			 ]);
 
 		$canton->save();

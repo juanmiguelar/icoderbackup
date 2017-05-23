@@ -126,28 +126,35 @@ class EdicionController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function update($anno)
+	public function update(Request $request, $id, User $user)
 	{
+		
+		if(strtotime($request->input("fecha_fin")) < strtotime($request->input("fecha_inicio"))){
+			
+			return redirect()->back()->withErrors([ 'La fecha de finalización debe ser posterior a la fecha de inicio']);
+			
+		}elseif(strtotime($request->input("fecha_inscripcion")) > strtotime($request->input("fecha_inicio"))){
+			
+			return redirect()->back()->withErrors([ 'La fecha de inicial de inscripción debe ser previa a la fecha de inicio']);
+			
+		}elseif (strtotime($request->input("fecha_fin_inscripcion")) < strtotime($request->input("fecha_inscripcion"))){ 
+			
+			return redirect()->back()->withErrors([ 'La fecha de final de inscrición debe ser posterior a la fecha de inicial de inscripción']);
+		}else{
+		$edicion = new Edicion();
+		
+		$edicion->lugar = $request->input("lugar");
+		$edicion->anno = $id;
+		$edicion->fecha_inicio = $request->input("fecha_inicio");
+		$edicion->fecha_fin = $request->input("fecha_fin");
+		$edicion->fecha_inscripcion = $request->input("fecha_inscripcion");
+		$edicion->fecha_fin_inscripcion = $request->input("fecha_fin_inscripcion");
+		$userid = $request->user()->id;
+		
+		edicion:: editarEdicion($edicion, $userid);
+			return redirect()->route('edicions.index');
+		}
 
-		$edicion->name = ucfirst($request->input("name"));
-    $edicion->slug = str_slug($request->input("name"), "-");
-		$edicion->description = ucfirst($request->input("description"));
-		$edicion->active_flag = 1;//change to reflect current status or changed status
-		$edicion->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:edicions,name,' . $edicion->id,
-					 'description' => 'required'
-			 ]);
-
-		$edicion->save();
-
-		Session::flash('message_type', 'blue');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Edicion \"<a href='edicions/$edicion->slug'>" . $edicion->name . "</a>\" was Updated.");
-
-		return redirect()->route('edicions.index');
 	}
 
 	/**
@@ -161,10 +168,10 @@ class EdicionController extends Controller
 		$edicion->active_flag = 0;
 		$edicion->save();
 
-		Session::flash('message_type', 'negative');
-		Session::flash('message_icon', 'hide');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', 'The Edicion ' . $edicion->name . ' was De-Activated.');
+		// Session::flash('message_type', 'negative');
+		// Session::flash('message_icon', 'hide');
+		// Session::flash('message_header', 'Success');
+		// Session::flash('message', 'La edición "' . $edicion->name . '" ha sido eliminada.');
 
 		return redirect()->route('edicions.index');
 	}

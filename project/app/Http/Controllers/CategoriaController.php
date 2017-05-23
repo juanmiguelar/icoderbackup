@@ -53,7 +53,9 @@ class CategoriaController extends Controller
 	 */
 	public function create()
 	{
-		return view('categorias.create');
+		$anno = date_format(date_create(date('Y-m-d H:i:s')), 'Y');
+		 $deportes = Deporte::orderBy('id_deporte', 'desc')->paginate(10);
+		return view('categorias.create',  compact('anno', 'deportes'));
 	}
 
 	/**
@@ -64,29 +66,30 @@ class CategoriaController extends Controller
 	 */
 	public function store(Request $request, User $user)
 	{
-		$categoria = new Categoria();
-
-		$categoria->name = ucfirst($request->input("name"));
-		$categoria->slug = str_slug($request->input("name"), "-");
-		$categoria->description = ucfirst($request->input("description"));
-		$categoria->active_flag = 1;
-		$categoria->author_id = $request->user()->id;
-
-		$deporte->numero_maximo_atletas = $request->input("numero");
+		$verify = Categoria::validarCategoria($request->input("nombre"), $request->input("deporte"));
 		
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:categorias',
-					 'description' => 'required'
-			 ]);
-
-		$categoria->save();
-
-		Session::flash('message_type', 'success');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Categoria \"<a href='categorias/$categoria->slug'>" . $categoria->name . "</a>\" was Created.");
-
-		return redirect()->route('categorias.index');
+			if ($verify) {
+				
+				if( $request->input("anno_inicio") <= $request->input("anno_fin")){
+	
+				$categoria = new Categoria();
+				$categoria->nombre = $request->input("nombre");
+		        $categoria->anno_inicio = $request->input("anno_inicio");
+		        $categoria->anno_final= $request->input("anno_fin");
+		        $categoria->numero_maximo_atletas = $request->input("numero_maximo_atletas");
+		        $categoria->id_deporte = $request->input("deporte");
+		        $categoria->active_flag = 1;
+		        
+		
+				$categoria->save();
+	
+				return redirect('categorias');	
+				}else{
+					return redirect()->back()->withErrors(['El año Final debe ser posterior al año inicial.']);
+				}
+		}else{
+			return redirect()->back()->withErrors(['La categoría "'. $request->input("nombre") .'" ya esta registrada en este deporte.']);
+		}
 	}
 
 	/**
@@ -111,9 +114,9 @@ class CategoriaController extends Controller
 	 */
 	public function edit(Categoria $categoria)
 	{
-		//$categoria = $this->model->findOrFail($id);
-
-		return view('categorias.edit', compact('categoria'));
+		$anno = date_format(date_create(date('Y-m-d H:i:s')), 'Y');
+		$deportes = Deporte::orderBy('id_deporte', 'desc')->paginate(10);
+		return view('categorias.edit',  compact('categoria','anno', 'deportes'));
 	}
 
 	/**
@@ -125,26 +128,31 @@ class CategoriaController extends Controller
 	 */
 	public function update(Request $request, Categoria $categoria, User $user)
 	{
-
-		$categoria->name = ucfirst($request->input("name"));
-    $categoria->slug = str_slug($request->input("name"), "-");
-		$categoria->description = ucfirst($request->input("description"));
-		$categoria->active_flag = 1;//change to reflect current status or changed status
-		$categoria->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:categorias,name,' . $categoria->id,
-					 'description' => 'required'
-			 ]);
-
-		$categoria->save();
-
-		Session::flash('message_type', 'blue');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Categoria \"<a href='categorias/$categoria->slug'>" . $categoria->name . "</a>\" was Updated.");
-
-		return redirect()->route('categorias.index');
+		$verify = Categoria::validarCategoria($request->input("nombre"), $request->input("deporte"));
+		
+			if ($verify) {
+				
+				if( $request->input("anno_inicio") <= $request->input("anno_fin")){
+	
+				$categorianueva = new Categoria();
+				$categorianueva ->id_categoria= $categoria->id_categoria;
+				$categorianueva ->nombre = $request->input("nombre");
+		        $categorianueva ->anno_inicio = $request->input("anno_inicio");
+		        $categorianueva ->anno_final= $request->input("anno_fin");
+		        $categorianueva ->numero_maximo_atletas = $request->input("numero_maximo_atletas");
+		        $categorianueva ->id_deporte = $request->input("deporte");
+		       
+		        
+		
+				Categoria::editarCategoria($categorianueva);
+	
+				return redirect('categorias');	
+				}else{
+					return redirect()->back()->withErrors(['El año Final debe ser posterior al año inicial.']);
+				}
+		}else{
+			return redirect()->back()->withErrors(['La categoría "'. $request->input("nombre") .'" ya esta registrada en este deporte.']);
+		}
 	}
 
 	/**
@@ -161,7 +169,7 @@ class CategoriaController extends Controller
 		Session::flash('message_type', 'negative');
 		Session::flash('message_icon', 'hide');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', 'The Categoria ' . $categoria->name . ' was De-Activated.');
+		Session::flash('message', 'La categoría fue eliminada');
 
 		return redirect()->route('categorias.index');
 	}

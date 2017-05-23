@@ -10,7 +10,8 @@
     @include('error')
 <div class="row">
             <div class="col-md-12">
-                 <form action="{{ route('edicions.update', $edicion->id) }}" method="POST">
+                 <form action="{{ route('edicions.update', $edicion->anno) }}" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="row">
                         <div class="form-group col-xs-4">
@@ -19,20 +20,12 @@
                         </div> 
                     </div>
                 <div class="row">
-                    <div class="form-group col-md-1">
-                	    <label for="anno-field">Año</label>
-                            <select  class="selectpicker form-control" id="anno-field" name="anno" required>
-                                @for ($i = $edicion->anno-10 ; $i < $edicion->anno+10 ; $i++)
-                                    <option value= "{{ $i }}" {{ $edicion->anno == $i ? 'selected' : '' }}>{{$i}}</option>
-                                @endfor
-                           </select>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-xs-2">
                     	<label for="fecha_inicio-field">Fecha inicial de edición</label>
                     	    <div class="input-group date" data-provide="datepicker">
-                                <input type="text" class="form-control" id="fecha_inicio-field" name="fecha_inicio" data-date-format="YYYY-MM-DD" required>
+                                <input type="text" class="form-control" id="fecha_inicio-field" name="fecha_inicio"  value= "{{$edicion->fecha_inicio}}" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </div>
@@ -43,7 +36,7 @@
                     <div class="form-group col-xs-2">
                 	    <label for="fecha_fin-field">Fecha final de edición</label>
                     	    <div class="input-group date" data-provide="datepicker">
-                                <input type="text" class="form-control" id="fecha_fin-field" name="fecha_fin" data-date-format="YYYY-MM-DD" required>
+                                <input type="text" class="form-control" id="fecha_fin-field" name="fecha_fin" value= "{{$edicion->fecha_fin}}" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </div>
@@ -54,7 +47,7 @@
                     <div class="form-group col-xs-2">
                     	<label for="fecha_inscripcion-field">Fecha inicial de inscripción</label>
                     	<div class="input-group date" data-provide="datepicker">
-                            <input type="text" class="form-control" id="fecha_inscripcion-field" name="fecha_inscripcion" data-date-format="YYYY-MM-DD" required>
+                            <input type="text" class="form-control" id="fecha_inscripcion-field" name="fecha_inscripcion" value= "{{$edicion->fecha_inscripcion}}" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </div>
@@ -65,7 +58,7 @@
                     <div class="form-group col-xs-2">
                     	<label for="fecha_fin_inscripcion-field">Fecha final de inscripción</label>
                     	<div class="input-group date" data-provide="datepicker">
-                            <input type="text" class="form-control" id="fecha_fin_inscripcion-field" name="fecha_fin_inscripcion" data-date-format="YYYY-MM-DD" required>
+                            <input type="text" class="form-control" id="fecha_fin_inscripcion-field" name="fecha_fin_inscripcion" value= "{{$edicion->fecha_fin_inscripcion}}" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </div>

@@ -21,7 +21,7 @@ class Rama extends Model
     
     public static function showRamas() {
          
-       $ramas = Rama::where('active_flag', 1)->orderBy('id_rama', 'desc')->paginate(10);
+       $ramas = Rama::where('active_flag', 1)->orderBy('id_categoria', 'desc')->paginate(10);
 		
        return $ramas;
       }
