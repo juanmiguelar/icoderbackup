@@ -13,8 +13,8 @@ use App\Categoria;
 use App\Deporte;
 use Illuminate\Http\Request;
 use \Session;
-
 class RamaController extends Controller
+
 {
 	/**
 	 * Variable to model
@@ -22,7 +22,8 @@ class RamaController extends Controller
 	 * @var rama
 	 */
 	protected $model;
-
+	
+	
 	/**
 	 * Create instance of controller with Model
 	 *
@@ -38,13 +39,14 @@ class RamaController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public
+
+	function index()
 	{
 		$ramas = Rama::showRamas();
-		$categorias = Categoria::showCategorias();
-		$deportes = Deporte::showDeportes();
+		$categorias = Rama::showCategoriaDeporte();
 		$active = Rama::where('active_flag', 1);
-		return view('ramas.index', compact('ramas','categorias','deportes', 'active'));
+		return view('ramas.index', compact('ramas', 'categorias','active'));
 	}
 
 	/**
@@ -52,9 +54,12 @@ class RamaController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public
+
+	function create()
 	{
-		return view('ramas.create');
+		$categorias = Rama::showCategoriaDeporte();
+		return view('ramas.create', compact('categorias'));
 	}
 
 	/**
@@ -63,29 +68,32 @@ class RamaController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function store(Request $request, User $user)
+	public
+
+	function store(Request $request, User $user)
 	{
+		$verify = Rama::validarRama($request->input("nombre"), $request->input("categoria"));
+		
+		if ($verify) {
+			
 		$rama = new Rama();
-
-		$rama->name = ucfirst($request->input("name"));
-		$rama->slug = str_slug($request->input("name"), "-");
-		$rama->description = ucfirst($request->input("description"));
-		$rama->active_flag = 1;
-		$rama->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:ramas',
-					 'description' => 'required'
-			 ]);
-
-		$rama->save();
-
+		$rama->nombre = $request->input("nombre");
+		$rama->id_categoria = $request->input("categoria");
+		
+		Rama::insertarRama($rama);
+		
 		Session::flash('message_type', 'success');
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Rama \"<a href='ramas/$rama->slug'>" . $rama->name . "</a>\" was Created.");
-
+		Session::flash('message', "La rama ha sido creada");
+		
 		return redirect()->route('ramas.index');
+		
+		}else{
+			
+		return redirect()->back()->withErrors(['La rama "'. $request->input("nombre") .'" ya existe en esta categoría.']);
+		
+		}
 	}
 
 	/**
@@ -94,9 +102,12 @@ class RamaController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Rama $rama)
+	public
+
+	function show(Rama $rama)
 	{
-		//$rama = $this->model->findOrFail($id);
+
+		// $rama = $this->model->findOrFail($id);
 
 		return view('ramas.show', compact('rama'));
 	}
@@ -107,11 +118,13 @@ class RamaController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit(Rama $rama)
-	{
-		//$rama = $this->model->findOrFail($id);
+	public
 
-		return view('ramas.edit', compact('rama'));
+	function edit(Rama $rama)
+	{
+
+		$categorias = Rama::showCategoriaDeporte();
+		return view('ramas.edit', compact('rama','categorias'));
 	}
 
 	/**
@@ -121,28 +134,29 @@ class RamaController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function update(Request $request, Rama $rama, User $user)
+	public
+
+	function update(Request $request, Rama $rama, User $user)
 	{
-
-		$rama->name = ucfirst($request->input("name"));
-    $rama->slug = str_slug($request->input("name"), "-");
-		$rama->description = ucfirst($request->input("description"));
-		$rama->active_flag = 1;//change to reflect current status or changed status
-		$rama->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:ramas,name,' . $rama->id,
-					 'description' => 'required'
-			 ]);
-
-		$rama->save();
-
-		Session::flash('message_type', 'blue');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Rama \"<a href='ramas/$rama->slug'>" . $rama->name . "</a>\" was Updated.");
-
-		return redirect()->route('ramas.index');
+			$verify = Rama::validarRama($request->input("nombre"), $request->input("categoria"));
+			
+			if ($verify) {
+			$ramanueva = new Rama();
+			$ramanueva->id_rama = $rama->id_rama;
+			$ramanueva->nombre = $request->input("nombre");
+			$ramanueva->id_categoria = $request->input("categoria");
+			$userid = $request->user()->id;
+			
+			Rama::editarRama($ramanueva, $userid);
+			
+			Session::flash('message_type', 'success');
+			Session::flash('message_icon', 'checkmark');
+			Session::flash('message_header', 'Success');
+			Session::flash('message', "La rama ha sido editada.");
+			return redirect()->route('ramas.index');
+			}else{
+			return redirect()->back()->withErrors(['La rama "'. $request->input("nombre") .'" ya existe en esta categoría.']);
+		}
 	}
 
 	/**
@@ -155,12 +169,10 @@ class RamaController extends Controller
 	{
 		$rama->active_flag = 0;
 		$rama->save();
-
 		Session::flash('message_type', 'negative');
 		Session::flash('message_icon', 'hide');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', 'The Rama ' . $rama->name . ' was De-Activated.');
-
+		Session::flash('message', 'La rama ha sido eliminada.');
 		return redirect()->route('ramas.index');
 	}
 
@@ -170,16 +182,16 @@ class RamaController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function reactivate(Rama $rama)
+	public
+
+	function reactivate(Rama $rama)
 	{
 		$rama->active_flag = 1;
 		$rama->save();
-
 		Session::flash('message_type', 'success');
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
 		Session::flash('message', 'The Rama ' . $rama->name . ' was Re-Activated.');
-
 		return redirect()->route('ramas.index');
 	}
 }

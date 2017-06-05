@@ -22,24 +22,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($deportes as $deporte)
-                        @foreach($categorias as $categoria)
-                            @foreach($pruebas as $prueba)
-                                 @if($deporte->id_deporte == $categoria->id_deporte)
-                                    @if($categoria->id_categoria == $prueba->id_categoria)
+                        @foreach($pruebas as $prueba)
+                            @foreach($categorias as $categoria)
+                                @if($categoria->id_categoria == $prueba->id_categoria)
                                             <tr>
-                                                <td class="text-center">{{$deporte->nombre}}</td>
+                                                <td class="text-center">{{$categoria->deporNombre}}</td>
                                                 
                                                 <td>{{$categoria->nombre}}</td>
-                                                <td><strong>{{$prueba->nombre}}</strong></td>
+                                                <td>{{$prueba->nombre}}</td>
                                                 
                                                 <td class="text-right">
                                                     
-                                                    <a class="btn btn-xs btn-warning" href="{{ route('pruebas.edit', $prueba->id) }}">
+                                                    <a class="btn btn-xs btn-warning" href="{{ route('pruebas.edit', $prueba->id_prueba) }}">
                                                         <i class="glyphicon glyphicon-edit"></i> Editar
                                                     </a>
                 
-                                                    <form action="{{ route('pruebas.destroy', $prueba->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
+                                                    <form action="{{ route('pruebas.destroy', $prueba) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Seguro eliminar?');">
                                                         {{csrf_field()}}
                                                         <input type="hidden" name="_method" value="DELETE">
                 
@@ -47,9 +45,7 @@
                                                     </form>
                                                 </td>
                                             </tr>
-                                        @endif
-                                    @endif
-                                @endforeach    
+                                        @endif   
                             @endforeach
                         @endforeach
                     </tbody>

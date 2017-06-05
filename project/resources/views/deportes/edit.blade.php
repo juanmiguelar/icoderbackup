@@ -25,7 +25,6 @@
                 	        <div class="col-xs-6 col-sm-3">
                                 <div class="tipo">
                                     <select   class="selectpicker form-control" id="tipo-field" name="tipo" required>
-                                        <!--arreglar-->
                                             <option value="Individual" {{ $deporte->tipo == "Individual" ? 'selected' : '' }}>Individual</option>
                                             <option value="Grupal" {{ $deporte->tipo == "Grupal" ? 'selected' : '' }}>Grupal</option>
                                     </select>
@@ -35,7 +34,7 @@
                     </div>
                 <div class="well well-sm">
                     <button type="submit" class="btn btn-primary">Guardar</button>
-                    <a class="btn btn-link pull-right" href="{{ route('deportes.index') }}"><i class="glyphicon glyphicon-backward"></i>Volver</a>
+                    <a class="btn btn-link pull-right" href="{{ route('deportes.index') }}"><i class="glyphicon glyphicon-backward"></i> Atrás</a>
                 </div>
             </form>
         </div>

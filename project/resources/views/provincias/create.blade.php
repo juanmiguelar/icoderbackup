@@ -2,7 +2,7 @@
 
 @section('header')
     <div class="page-header">
-        <h1><i class="glyphicon glyphicon-plus"></i> Provincium / Create </h1>
+        <h3><i class="glyphicon glyphicon-plus"></i> Crear Provincia </h3>
     </div>
 @endsection
 
@@ -17,12 +17,12 @@
 
                 <div class="form-group">
 	<label for="nombre-field">Nombre</label>
-	<input class="form-control" type="text" name="nombre" id="nombre-field" value="" />
-</div>
+	<input class="form-control" type="text" name="nombre" id="nombre-field" value=""  required/>
+	</div>
 
                 <div class="well well-sm">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    <a class="btn btn-link pull-right" href="{{ route('provincias.index') }}"><i class="glyphicon glyphicon-backward"></i> Back</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a class="btn btn-link pull-right" href="{{ route('provincias.index') }}"><i class="glyphicon glyphicon-backward"></i>  Atrás</a>
                 </div>
             </form>
 

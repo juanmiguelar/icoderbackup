@@ -50,6 +50,17 @@ Route::post("nueva_edicion/", array("as"=>"dashboard","uses"=>"EdicionController
 Route::get("editar_privilegio/{id}", array("as"=>"dashboard","uses"=>"UsuarioController@showEditarPrivilegio"));
 Route::get("store_editar_privilegio/{id}", array("as"=>"dashboard","uses"=>"UsuarioController@editarPrivilegio"));
 
+
+//INSCRIPCION INDIVIDUAL
+Route::get("index_inscripcion/{id}", array("as"=>"dashboard","uses"=>"InscripcionController@index_inscripcion"));
+Route::get("buscarPadron", array("as"=>"dashboard","uses"=>"InscripcionController@buscarPadron"));
+Route::get("storePersonal", array("as"=>"dashboard","uses"=>"InscripcionController@storePersonal"));
+Route::get("storeMedica", array("as"=>"dashboard","uses"=>"InscripcionController@storeMedica"));
+Route::get("storeContacto", array("as"=>"dashboard","uses"=>"InscripcionController@storeContacto"));
+Route::get("storeCategorias", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategorias"));
+
+
+
 //RUTA
 //Route::get("usuarios_equipos/{correo}", array("as"=>"dashboard","uses"=>"UsuarioController@mostrarEquiposRelacionados"));
 //Route::post("buscarPorNombreApellido", array("as"=>"dashboard","uses"=>"UsuarioController@buscarPorNombreApellido"));

@@ -67,7 +67,7 @@
                 </div>
             <div class="well well-sm">
                 <button type="submit" class="btn btn-primary">Guardar</button>
-                 <a class="btn btn-link pull-right" href="{{ route('edicions.index') }}"><i class="glyphicon glyphicon-backward"></i>Volver</a>
+                 <a class="btn btn-link pull-right" href="{{ route('edicions.index') }}"><i class="glyphicon glyphicon-backward"></i> Atrás</a>
             </div>
         </form>
     </div>

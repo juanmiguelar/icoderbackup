@@ -16,6 +16,7 @@
                 <table class="table table-condensed table-striped">
                     <thead>
                         <tr>
+                            <th class="text-center">#</th>
                             <th>Nombre</th>
                             <th>Tipo</th>
                             <th class="text-right">Opciones</th>
@@ -25,7 +26,7 @@
                     <tbody>
                         @foreach($deportes as $deporte)
                             <tr>
-                               
+                                <td class="text-center"><strong>{{$deporte->id_deporte}}</strong></td>
                                 <td>{{$deporte->nombre}}</td>
                                 <td>{{$deporte->tipo}}</td>
                                 
@@ -35,7 +36,7 @@
                                         <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 
-                                    <form action="{{ route('deportes.destroy', $deporte->id_deporte) }}" method="POST" style="display: inline;" onsubmit="return confirm('Está seguro de eliminar el deporte?');">
+                                    <form action="{{ route('deportes.destroy', $deporte->id_deporte) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Seguro eliminar?');">
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="DELETE">
 

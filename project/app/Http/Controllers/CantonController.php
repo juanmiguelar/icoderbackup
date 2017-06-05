@@ -12,8 +12,8 @@ use App\Canton;
 use App\Provincium;
 use Illuminate\Http\Request;
 use \Session;
-
 class CantonController extends Controller
+
 {
 	/**
 	 * Variable to model
@@ -21,13 +21,14 @@ class CantonController extends Controller
 	 * @var canton
 	 */
 	protected $model;
-
 	/**
 	 * Create instance of controller with Model
 	 *
 	 * @return void
 	 */
-	public function __construct(Canton $model)
+	public
+
+	function __construct(Canton $model)
 	{
 		$this->model = $model;
 	}
@@ -37,12 +38,12 @@ class CantonController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public
+
+	function index()
 	{
 		$cantons = Canton::obtenerCantones();
-		
 		$provincias = Provincium::obtenerProvincias();
-		
 		return view('cantons.index', compact('cantons', 'provincias'));
 	}
 
@@ -51,7 +52,9 @@ class CantonController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public
+
+	function create()
 	{
 		$provincias = Provincium::obtenerProvincias();
 		return view('cantons.create', compact('provincias'));
@@ -63,25 +66,32 @@ class CantonController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function store(Request $request, User $user)
-	{
-		$canton = new Canton();
+	public
 
-		$canton->nombre = $request->input("description");
+	function store(Request $request, User $user)
+	{
+		$this->validate($request, ['nombre' => 'required', 'provincia' => 'required']);
+		$verify= Canton::validarCanton($request->input("nombre"), $request->input("provincia"));
+		
+		if($verify){
+		
+		$provincias = Provincium::obtenerProvincias();
+		$canton = new Canton();
+		$canton->nombre = $request->input("nombre");
+		$canton->id_provincia = $request->input("provincia");
 		$canton->active_flag = 1;
 		
-		$this->validate($request, [
-					 'nombre' => 'required'
-			 ]);
-
-		$canton->save();
-
+		Canton::insertarCanton($canton);
 		Session::flash('message_type', 'success');
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Canton \"<a href='cantons/$canton->slug'>" . $canton->name . "</a>\" was Created.");
+		Session::flash('message', 'Se insertó el cantón "'. $request->input("nombre") .'" con éxito.');
+		return redirect()->route('cantons.index', compact('provincias'));
+		}else{	
+		return redirect()->back()->withErrors(['El cantón "'. $request->input("nombre") .'" ya se encuentra registrado.']);
 
-		return redirect()->route('cantons.index');
+		}
+		
 	}
 
 	/**
@@ -90,9 +100,12 @@ class CantonController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Canton $canton)
+	public
+
+	function show(Canton $canton)
 	{
-		//$canton = $this->model->findOrFail($id);
+
+		// $canton = $this->model->findOrFail($id);
 
 		return view('cantons.show', compact('canton'));
 	}
@@ -103,11 +116,14 @@ class CantonController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit(Canton $canton)
-	{
-		$canton = $this->model->findOrFail($id);
+	public
 
-		return view('cantons.edit', compact('canton'));
+	function edit($id_canton)
+	{
+		$canton = Canton::obtenerCanton($id_canton);
+		$provincias = Provincium::obtenerProvincias();
+		
+		return view('cantons.edit', compact('canton', 'provincias'));
 	}
 
 	/**
@@ -117,27 +133,28 @@ class CantonController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function update(Request $request, Canton $canton, User $user)
+	public
+
+	function update(Request $request, $id_canton)
 	{
-
-		$canton->name = ucfirst($request->input("name"));
-    	$canton->slug = str_slug($request->input("name"), "-");
-		$canton->description = ucfirst($request->input("description"));
-		$canton->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:cantons,name,' . $canton->id_canton,
-					 'description' => 'required'
-			 ]);
-
-		$canton->save();
-
+		$this->validate($request, ['nombre' => 'required', 'provincia' => 'required']);
+		$verify= Canton::validarCanton($request->input("nombre"), $request->input("provincia"));
+		
+		if($verify){
+		$canton = new Canton();
+		$canton->nombre = $request->input("nombre");
+		$canton->id_provincia = $request->input("provincia");
+		Canton::editarCanton($canton, $id_canton);
+		
 		Session::flash('message_type', 'blue');
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Canton \"<a href='cantons/$canton->slug'>" . $canton->name . "</a>\" was Updated.");
-
+		Session::flash('message', 'El cantón "'. $request->input("nombre") .'" ha sido actualizado.');
 		return redirect()->route('cantons.index');
+		}else{	
+			return redirect()->back()->withErrors(['El cantón "'. $request->input("nombre") .'" ya se encuentra registrado.']);
+
+		}
 	}
 
 	/**
@@ -146,16 +163,13 @@ class CantonController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy(Canton $canton)
-	{
-		$canton->active_flag = 0;
-		$canton->save();
-
+	public function destroy($id_canton){
+		Canton::eliminarCanton($id_canton);
+		
 		Session::flash('message_type', 'negative');
 		Session::flash('message_icon', 'hide');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', 'The Canton ' . $canton->name . ' was De-Activated.');
-
+		Session::flash('message', 'El cantón se ha eliminado con éxito');
 		return redirect()->route('cantons.index');
 	}
 
@@ -165,16 +179,18 @@ class CantonController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function reactivate(Canton $canton)
+	public
+
+	function reactivate(Canton $canton)
 	{
 		$canton->active_flag = 1;
 		$canton->save();
-
 		Session::flash('message_type', 'success');
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
 		Session::flash('message', 'The Canton ' . $canton->name . ' was Re-Activated.');
-
 		return redirect()->route('cantons.index');
 	}
 }
+
+

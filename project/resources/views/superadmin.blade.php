@@ -47,7 +47,7 @@
 
                             <li><a href="{{ route('register') }}">Registrarse</a></li>
                         @else
-                            <li><a href="/home" >San Ramón</a></li>
+                            <li><a href="/home" >{{ Auth::user()->canton() }}</a></li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>

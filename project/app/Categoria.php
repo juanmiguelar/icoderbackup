@@ -33,7 +33,7 @@ class Categoria extends Model
       return $cantidad == 0;
     }
     
-        public static function editarCategoria($categoria) {
+    public static function editarCategoria($categoria) {
         \DB::table('categorias')
             ->where('id_categoria', $categoria->id_categoria)
             ->update(['nombre' => $categoria->nombre,'anno_inicio'=> $categoria->anno_inicio, 'anno_final' => $categoria->anno_final, 'id_deporte' => $categoria->id_deporte, 'numero_maximo_atletas' => $categoria->numero_maximo_atletas,'updated_at' => date('Y-m-d H:i:s')]);

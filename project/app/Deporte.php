@@ -31,5 +31,18 @@ class Deporte extends Model
 		
        return $deportes;
       }
+      
+       public static function showDeporte($id_deporte) {
+         
+        $deporte =  Deporte::where('id_deporte', $id_deporte)->first();
+    
+        return $deporte;
+      }
+      
+      public static function validarDeporte($nombre, $tipo){
+        $cantidad = Deporte::where('nombre', $nombre)->where('tipo', $tipo)->count();
+        return $cantidad == 0;
+      }
+    
     
 }

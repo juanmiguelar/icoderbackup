@@ -4,7 +4,6 @@
     <div class="page-header clearfix">
         <h3>
             <i class="glyphicon glyphicon-align-justify"></i> Persona
-            <a class="btn btn-success pull-right" href="{{ route('personas.create') }}"><i class="glyphicon glyphicon-plus"></i> Crear</a>
         </h3>
     </div>
 @endsection

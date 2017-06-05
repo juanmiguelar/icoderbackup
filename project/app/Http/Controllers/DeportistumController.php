@@ -9,6 +9,7 @@ use App\User;
 use Auth;
 
 use App\Deportistum;
+use App\Deporte;
 use Illuminate\Http\Request;
 use \Session;
 
@@ -41,6 +42,7 @@ class DeportistumController extends Controller
 		$deportistas = Deportistum::show();
 		return view('deportistas.index', compact('deportistas', 'active'));
 	}
+	
 
 	/**
 	 * Show the form for creating a new resource.

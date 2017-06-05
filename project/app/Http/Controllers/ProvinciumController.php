@@ -59,29 +59,26 @@ class ProvinciumController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function store(Request $request, User $user)
-	{
-		$provincium = new Provincium();
-
-		$provincium->name = ucfirst($request->input("name"));
-		$provincium->slug = str_slug($request->input("name"), "-");
-		$provincium->description = ucfirst($request->input("description"));
-		$provincium->active_flag = 1;
-		$provincium->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:provincias',
-					 'description' => 'required'
-			 ]);
-
-		$provincium->save();
-
-		Session::flash('message_type', 'success');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Provincium \"<a href='provincias/$provincium->slug'>" . $provincium->name . "</a>\" was Created.");
-
-		return redirect()->route('provincias.index');
+	public function store(Request $request, User $user) {
+		
+		$verify = Provincium::validarProvincia($request->input("nombre")); 
+		
+		if ($verify) {
+		
+			$provincium = new Provincium();
+	
+			$provincium->nombre =($request->input("nombre"));
+			$provincium->active_flag = 1;
+			$provincium->author_id = $request->user()->id;
+	
+	
+			$provincium->save();
+		
+			return redirect()->route('provincias.index');
+		}else{
+			return redirect()->back()->withErrors(['La provincia "'. $request->input("nombre") .'" ya esta registrada.']);
+		}
+		
 	}
 
 	/**
@@ -103,11 +100,10 @@ class ProvinciumController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit(Provincium $provincium)
+	public function edit(Provincium $provincia)
 	{
-		//$provincium = $this->model->findOrFail($id);
 
-		return view('provincias.edit', compact('provincium'));
+		return view('provincias.edit', compact('provincia'));
 	}
 
 	/**
@@ -117,28 +113,26 @@ class ProvinciumController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function update(Request $request, Provincium $provincium, User $user)
+	public function update(Request $request, Provincium $provincia, User $user)
 	{
-
-		$provincium->name = ucfirst($request->input("name"));
-    $provincium->slug = str_slug($request->input("name"), "-");
-		$provincium->description = ucfirst($request->input("description"));
-		$provincium->active_flag = 1;//change to reflect current status or changed status
-		$provincium->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:provincias,name,' . $provincium->id,
-					 'description' => 'required'
-			 ]);
-
-		$provincium->save();
-
-		Session::flash('message_type', 'blue');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Provincium \"<a href='provincias/$provincium->slug'>" . $provincium->name . "</a>\" was Updated.");
-
-		return redirect()->route('provincias.index');
+		$verify = Provincium::validarProvincia($request->input("nombre")); 
+		
+		
+		if ($verify) {
+			
+		
+			$provinciumNueva = new Provincium();
+			$provinciumNueva->id_provincia = $provincia->id_provincia;
+			$provinciumNueva->nombre = ($request->input("nombre"));
+			$provinciumNueva->author_id = $request->user()->id;
+	
+	
+			Provincium::editarProvincia($provinciumNueva);
+		
+			return redirect()->route('provincias.index');
+		}else{
+			return redirect()->back()->withErrors(['La provincia "'. $request->input("nombre") .'" ya esta registrada.']);
+		}
 	}
 
 	/**
@@ -147,15 +141,14 @@ class ProvinciumController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy(Provincium $provincium)
+	public function destroy($id)
 	{
-		$provincium->active_flag = 0;
-		$provincium->save();
+		Provincium::desactivar($id);
 
 		Session::flash('message_type', 'negative');
 		Session::flash('message_icon', 'hide');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', 'The Provincium ' . $provincium->name . ' was De-Activated.');
+		Session::flash('message', 'La provincia ha sido eliminada.');
 
 		return redirect()->route('provincias.index');
 	}

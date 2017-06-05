@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use App\Canton;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -28,6 +30,12 @@ class User extends Authenticatable
     ];
     
      protected $table = 'users';
+     
+    public function canton()
+    {
+        $canton = Canton::obtenerCanton($this->id_canton);
+        return $canton->nombre;
+    }
     
     
      public static function showUser($id) {

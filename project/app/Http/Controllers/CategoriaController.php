@@ -165,6 +165,14 @@ class CategoriaController extends Controller
 	{
 		$categoria->active_flag = 0;
 		$categoria->save();
+		
+		\DB::table('pruebas')
+				->where('id_categoria', $categoria->id_categoria)
+				->update(['active_flag' => 0]);
+			
+			\DB::table('ramas')
+				->where('id_categoria', $categoria->id_categoria)
+				->update(['active_flag' => 0]);
 
 		Session::flash('message_type', 'negative');
 		Session::flash('message_icon', 'hide');

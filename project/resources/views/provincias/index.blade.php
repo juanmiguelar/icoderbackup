@@ -31,11 +31,11 @@
                                 
                                 <td class="text-right">
                                     
-                                    <a class="btn btn-xs btn-warning" href="{{ route('provincias.edit', $provincium->id) }}">
+                                    <a class="btn btn-xs btn-warning" href="{{ route('provincias.edit', $provincium->id_provincia) }}">
                                         <i class="glyphicon glyphicon-edit"></i> Editar
                                     </a>
 
-                                    <form action="{{ route('provincias.destroy', $provincium->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
+                                    <form action="{{ route('provincias.destroy', $provincium->id_provincia) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Seguro eliminar?');">
                                         {{csrf_field()}}
                                         <input type="hidden" name="_method" value="DELETE">
 

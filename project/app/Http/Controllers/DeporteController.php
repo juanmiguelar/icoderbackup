@@ -65,35 +65,26 @@ class DeporteController extends Controller
 	 */
 	public function store(Request $request, User $user)
 	{
+		
+	$verify = Deporte::validarDeporte($request->input("nombre"), $request->input("tipo"));
+		
+	if ($verify) {
 		$deporte = new Deporte();
 		$deporte->nombre = $request->input("nombre");
 		$deporte->tipo = $request->input("tipo");
 		$userid = $request->user()->id;
 		
 		Deporte:: insertarDeporte($deporte, $userid);
-
 		
-		/**
-		$deporte->name = ucfirst($request->input("name"));
-		$deporte->slug = str_slug($request->input("name"), "-");
-		$deporte->description = ucfirst($request->input("description"));
-		$deporte->active_flag = 1;
-		$deporte->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:deportes',
-					 'description' => 'required'
-			 ]);
-
-		$deporte->save();
-
 		Session::flash('message_type', 'success');
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Deporte \"<a href='deportes/$deporte->slug'>" . $deporte->name . "</a>\" was Created.");
-		**/
+		Session::flash('message', 'El deporte ' . $deporte->nombre . ' ha sido creado exitosamente.');
 		
 		return redirect()->route('deportes.index');
+	}else{
+		return redirect()->back()->withErrors(['El deporte "'. $request->input("nombre") .'" de tipo  "'. $request->input("tipo") .'" ya existe.']);
+	}
 	}
 
 	/**
@@ -132,6 +123,10 @@ class DeporteController extends Controller
 	 */
 	public function update(Request $request, $id, User $user)
 	{
+	
+		$verify = Deporte::validarDeporte($request->input("nombre"), $request->input("tipo"));
+		
+		if ($verify) {
 
 		$deporte = Deporte::where( 'id_deporte' , $id)->first();
 		$deporte->nombre = $request->input("nombre");
@@ -139,28 +134,16 @@ class DeporteController extends Controller
 		$userid = $request->user()->id;
 		
 		Deporte:: editarDeporte($deporte, $userid);
-		
-		
-		/*$deporte->name = ucfirst($request->input("name"));
-    	$deporte->slug = str_slug($request->input("name"), "-");
-		$deporte->description = ucfirst($request->input("description"));
-		$deporte->active_flag = 1;//change to reflect current status or changed status
-		$deporte->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:deportes,name,' . $deporte->id,
-					 'description' => 'required'
-			 ]);
-
-		$deporte->save();
-
-		Session::flash('message_type', 'blue');
+				
+		Session::flash('message_type', 'success');
 		Session::flash('message_icon', 'checkmark');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Deporte \"<a href='deportes/$deporte->slug'>" . $deporte->name . "</a>\" was Updated.");
-		*/
-		
+		Session::flash('message', 'El deporte ' . $deporte->nombre . ' ha sido actualizado exitosamente.');		
 		return redirect()->route('deportes.index');
+
+		}else{
+		return redirect()->back()->withErrors(['El deporte "'. $request->input("nombre") .'" de tipo  "'. $request->input("tipo") .'" ya existe.']);
+	}
 	}
 
 	/**
@@ -171,14 +154,25 @@ class DeporteController extends Controller
 	 */
 	public function destroy(Deporte $deporte)
 	{
-		$deporte->active_flag = 0;
+		\DB::select("Call desactivardeporte(". $deporte->id_deporte .")");
+		$categorias = \DB::table('categorias')->where('id_deporte', '=', $deporte->id_deporte)->get();
 		
-		$deporte->save();
+		// dd($categorias);
+		
+		foreach ($categorias as $categoria) {
+			\DB::table('pruebas')
+				->where('id_categoria', $categoria->id_categoria)
+				->update(['active_flag' => 0]);
+			
+			\DB::table('ramas')
+				->where('id_categoria', $categoria->id_categoria)
+				->update(['active_flag' => 0]);
+		}
 
 		Session::flash('message_type', 'negative');
 		Session::flash('message_icon', 'hide');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', 'El deporte ' . $deporte->nombre . ' ha sido eliminado.');
+		Session::flash('message', 'El deporte ha sido eliminado.');
 
 		
 		return redirect()->route('deportes.index');

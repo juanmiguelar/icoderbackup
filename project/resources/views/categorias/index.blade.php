@@ -26,7 +26,7 @@
                     <tbody>
                         @foreach($categorias as $categoria)
                             @foreach($deportes as $deporte)
-                                @if($categoria->id_deporte == $deporte->id_deporte)
+                                @if($deporte->id_deporte == $categoria->id_deporte)
                                     <tr>
                                         <td class="text-center"><strong>{{$categoria->id_categoria}}</strong></td>
                                         <td>{{$deporte->nombre}}</td>

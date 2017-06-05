@@ -31,14 +31,14 @@
                                         <td class="text-center"><strong>{{$canton->id_canton}}</strong></td>
         
                                         <td>{{$canton->nombre}}</td>
-                                        <td>{{$provincia->nombre_provincia}}</td>
+                                        <td>{{$provincia->nombre}}</td>
                                         
                                         <td class="text-right">
                                             <a class="btn btn-xs btn-warning" href="{{ route('cantons.edit', $canton->id_canton) }}">
                                                 <i class="glyphicon glyphicon-edit"></i> Editar
                                             </a>
         
-                                            <form action="{{ route('cantons.destroy', $canton->id_canton) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete? Are you sure?');">
+                                            <form action="{{ route('cantons.destroy', $canton->id_canton) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Seguro eliminar?');">
                                                 {{csrf_field()}}
                                                 <input type="hidden" name="_method" value="DELETE">
         

@@ -8,46 +8,22 @@
     <!-- META TAGs -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
 
-
     <!-- CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    
+     <link href="{{ asset('css/footer.css') }}" rel="stylesheet">
+     <link href="{{ asset('css/menu.css') }}" rel="stylesheet">
+     
     <!-- THEMES -->
-
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/cerulean/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/cosmo/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/cyborg/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/darkly/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/journal/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/lumen/bootstrap.min.css"> -->
     <link rel="stylesheet" href="https://bootswatch.com/paper/bootstrap.min.css"> 
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/readable/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/sandstone/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/simplex/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/slate/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/spacelab/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/superhero/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/united/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://bootswatch.com/yeti/bootstrap.min.css"> -->
-
-    <!-- /THEMES -->
-
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" href="{{ asset('dist/css/bootstrap-submenu.min.css') }}">
+   
     @yield('css')
 </head>
-
 <body>
 
     <nav class="navbar navbar-default">
@@ -59,7 +35,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Juegos Nacionales Estandar</a>
+                <a class="navbar-brand" href="/home">Juegos Nacionales</a>
             </div>
              <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">

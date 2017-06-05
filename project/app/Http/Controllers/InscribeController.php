@@ -9,6 +9,11 @@ use App\User;
 use Auth;
 
 use App\Inscribe;
+use App\Provincium;
+use App\Canton;
+use App\Categoria;
+use App\Rama;
+use App\Prueba;
 use Illuminate\Http\Request;
 use \Session;
 
@@ -45,9 +50,19 @@ class InscribeController extends Controller
 	
 	public function individual()
 	{
-	//	$inscribes = Inscribe::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
-	//	$active = Inscribe::where('active_flag', 1);
-			return view('inscribes.informacion_personal');
+	    
+		$active=0;
+		$tabName = "buscar";
+		
+		$provincias = Provincium::obtenerProvincias();
+        	
+		$cantons = Canton::obtenerCantones();
+		$categorias = Categoria::showCategorias();
+		
+		$pruebas =  Prueba::showPruebas();
+		$ramas =  Rama::showRamas();
+		
+		return view('inscripcions.informacion_inscripcion', compact('active','provincias','categorias', 'pruebas','ramas','cantons','tabName'));
 
 	}
 

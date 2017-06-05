@@ -10,7 +10,7 @@ use Auth;
 
 use App\Prueba;
 use App\Categoria;
-use App\Deporte;
+use App\Rama;
 
 use Illuminate\Http\Request;
 use \Session;
@@ -42,11 +42,10 @@ class PruebaController extends Controller
 	public function index()
 	{
 		$pruebas = Prueba::showPruebas();
-		$categorias = Categoria::showCategorias();
-		$deportes = Deporte::showDeportes();
+		$categorias = Rama::showCategoriaDeporte();
 		
 		$active = Prueba::where('active_flag', 1);
-		return view('pruebas.index', compact('pruebas','categorias','deportes', 'active'));
+		return view('pruebas.index', compact('pruebas','categorias', 'active'));
 	}
 
 	/**
@@ -56,7 +55,8 @@ class PruebaController extends Controller
 	 */
 	public function create()
 	{
-		return view('pruebas.create');
+		$categorias = Rama::showCategoriaDeporte();
+		return view('pruebas.create', compact('categorias'));
 	}
 
 	/**
@@ -65,29 +65,31 @@ class PruebaController extends Controller
 	 * @param Request $request
 	 * @return Response
 	 */
-	public function store(Request $request, User $user)
+	public function store(Request $request)
 	{
-		$prueba = new Prueba();
-
-		$prueba->name = ucfirst($request->input("name"));
-		$prueba->slug = str_slug($request->input("name"), "-");
-		$prueba->description = ucfirst($request->input("description"));
-		$prueba->active_flag = 1;
-		$prueba->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:pruebas',
-					 'description' => 'required'
-			 ]);
-
-		$prueba->save();
-
-		Session::flash('message_type', 'success');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Prueba \"<a href='pruebas/$prueba->slug'>" . $prueba->name . "</a>\" was Created.");
-
-		return redirect()->route('pruebas.index');
+			$verify = Prueba::validarPrueba($request->input("nombre"), $request->input("categoria"));
+			
+			if ($verify) {
+				$prueba = new Prueba();
+				$prueba->nombre = $request->input("nombre");
+				$prueba->id_categoria = $request->input("categoria");
+		
+				$this->validate($request, [
+							 'nombre' => 'required',
+							 'categoria' => 'required'
+					 ]);
+		
+				Prueba::insertarPrueba($prueba);
+		
+				Session::flash('message_type', 'success');
+				Session::flash('message_icon', 'checkmark');
+				Session::flash('message_header', 'Success');
+				Session::flash('message', "Se ha insertado la prueba con éxito");
+		
+				return redirect()->route('pruebas.index');
+			}else{
+			return redirect()->back()->withErrors(['La prueba "'. $request->input("nombre") .'" ya existe en esta categoría.']);
+		}
 	}
 
 	/**
@@ -111,9 +113,8 @@ class PruebaController extends Controller
 	 */
 	public function edit(Prueba $prueba)
 	{
-		//$prueba = $this->model->findOrFail($id);
-
-		return view('pruebas.edit', compact('prueba'));
+		$categorias = Rama::showCategoriaDeporte();
+		return view('pruebas.edit', compact('prueba', 'categorias'));
 	}
 
 	/**
@@ -126,25 +127,25 @@ class PruebaController extends Controller
 	public function update(Request $request, Prueba $prueba, User $user)
 	{
 
-		$prueba->name = ucfirst($request->input("name"));
-    $prueba->slug = str_slug($request->input("name"), "-");
-		$prueba->description = ucfirst($request->input("description"));
-		$prueba->active_flag = 1;//change to reflect current status or changed status
-		$prueba->author_id = $request->user()->id;
-
-		$this->validate($request, [
-					 'name' => 'required|max:255|unique:pruebas,name,' . $prueba->id,
-					 'description' => 'required'
-			 ]);
-
-		$prueba->save();
-
-		Session::flash('message_type', 'blue');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', "The Prueba \"<a href='pruebas/$prueba->slug'>" . $prueba->name . "</a>\" was Updated.");
-
-		return redirect()->route('pruebas.index');
+			$verify = Prueba::validarPrueba($request->input("nombre"), $request->input("categoria"));
+			
+			if ($verify) {
+			$pruebanueva = new Prueba();
+			$pruebanueva->id_prueba = $prueba->id_prueba;
+			$pruebanueva->nombre = $request->input("nombre");
+			$pruebanueva->id_categoria = $request->input("categoria");
+			$userid = $request->user()->id;
+			
+			Prueba::editarPrueba($pruebanueva, $userid);
+			
+			Session::flash('message_type', 'success');
+			Session::flash('message_icon', 'checkmark');
+			Session::flash('message_header', 'Success');
+			Session::flash('message', "La prueba ha sido editada.");
+			return redirect()->route('pruebas.index');
+			}else{
+			return redirect()->back()->withErrors(['La prueba "'. $request->input("nombre") .'" ya existe en esta categoría.']);
+		}
 	}
 
 	/**
@@ -161,7 +162,7 @@ class PruebaController extends Controller
 		Session::flash('message_type', 'negative');
 		Session::flash('message_icon', 'hide');
 		Session::flash('message_header', 'Success');
-		Session::flash('message', 'The Prueba ' . $prueba->name . ' was De-Activated.');
+		Session::flash('message', 'La prueba ha sido eliminada.');
 
 		return redirect()->route('pruebas.index');
 	}
