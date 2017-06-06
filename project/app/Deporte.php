@@ -39,6 +39,17 @@ class Deporte extends Model
         return $deporte;
       }
       
+      public static
+      
+      function nombreDeporteById($id){
+          // Obtengo el nombre del primer deporte con el mismo id
+          $nombre = \DB::table('deportes')
+                    ->where('id_deporte','=', $id)
+                    ->select('nombre')
+                    ->first();
+          return $nombre;
+      }
+      
       public static function validarDeporte($nombre, $tipo){
         $cantidad = Deporte::where('nombre', $nombre)->where('tipo', $tipo)->count();
         return $cantidad == 0;

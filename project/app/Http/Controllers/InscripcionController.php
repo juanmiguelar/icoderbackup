@@ -67,11 +67,15 @@ class InscripcionController extends Controller
 
 	function index_inscripcion($deporte)
 		{
+			
 			$deportes = Deporte::showDeportes();
 			$deportistas = Deportistum::show();
 			// Obtenemos las categorias
 			$categorias = Categoria::showCategorias();
-			return view('inscripcions.index_inscripcion', compact('deportistas', 'deportes', 'categorias'));
+			$deporteSeleccionado = Deporte::nombreDeporteById($deporte)->nombre;
+			// dd($deporteSeleccionado);
+			return view('inscripcions.index_inscripcion', 
+				compact('deportistas', 'deportes', 'categorias','deporte','deporteSeleccionado'));
 		}
 
 	/**
@@ -256,23 +260,28 @@ class InscripcionController extends Controller
 		// Si la persona no existe hago un insert
 		
 		$persona = Persona::showPersona($cedula);
+		$id_categoria = $request->input("radioCategoria");
+		$id_rama  = $request->input("prueba");
+		$id_prueba = $request->input("rama");
+		
+		dd($id_categoria);
 		
 		if ($persona == null){
 		    Persona::insertarPersona();
 		}else{	
 		}
-		$active = 2;
-		$tabName = "documentos";
+		// $active = 2;
+		// $tabName = "documentos";
 		
-		//colecciones para la vista
-		$persona = Persona::showPersona($cedula);
-		$provincias = Provincium::obtenerProvincias();	
-		$cantons = Canton::obtenerCantones();
-		$categorias = Categoria::showCategorias();
-		$pruebas =  Prueba::showPruebas();
-		$ramas =  Rama::showRamas();
+		// //colecciones para la vista
+		// $persona = Persona::showPersona($cedula);
+		// $provincias = Provincium::obtenerProvincias();	
+		// $cantons = Canton::obtenerCantones();
+		// $categorias = Categoria::showCategorias();///filtrar por deporte
+		// $pruebas =  Prueba::showPruebas();
+		// $ramas =  Rama::showRamas();
 		
-		return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+		// return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
 	
 		
 	}

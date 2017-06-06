@@ -53,7 +53,6 @@ class InscribeController extends Controller
 	    
 		$active=0;
 		$tabName = "buscar";
-		
 		$provincias = Provincium::obtenerProvincias();
         	
 		$cantons = Canton::obtenerCantones();
