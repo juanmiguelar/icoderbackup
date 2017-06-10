@@ -48,22 +48,7 @@ class InscribeController extends Controller
 		return view('inscribes.index');
 	}
 	
-	public function individual()
-	{
-	    
-		$active=0;
-		$tabName = "buscar";
-		$provincias = Provincium::obtenerProvincias();
-        	
-		$cantons = Canton::obtenerCantones();
-		$categorias = Categoria::showCategorias();
-		
-		$pruebas =  Prueba::showPruebas();
-		$ramas =  Rama::showRamas();
-		
-		return view('inscripcions.informacion_inscripcion', compact('active','provincias','categorias', 'pruebas','ramas','cantons','tabName'));
-
-	}
+	
 
 	/**
 	 * Show the form for creating a new resource.

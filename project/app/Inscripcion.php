@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Auth;
+
 class Inscripcion extends Model
 {
     protected $fillable = ['id_inscripcion'];
@@ -12,6 +14,28 @@ class Inscripcion extends Model
       return $this->belongsTo('App\User','author_id');
     }
     
+    public static function insertarInscripcion($persona, $id_deporte){
+    \DB::table ('inscripcions')->insert([
+                                        'id_persona' => $persona->id_persona, 
+                                        'id_deporte' => $id_deporte, 
+                                        'fecha' => date('Y-m-d H:i:s'),
+                                        'author_id' => Auth::user()->id,
+                                        'active_flag'=> 1]);
+    }
+    public static function agregarInscripcionPruebaCategoria($id_inscripcion, $id_categoria, $id_rama, $id_prueba){
+      \DB::table ('inscripcion_prueba_categoria')->insert([
+                                        'id_inscripcion' => $id_inscripcion, 
+                                        'id_prueba' => $id_prueba, 
+                                        'id_categoria' => $id_categoria,
+                                        'id_rama' => $id_rama]);
+    }
+      
+    public static function showInscripcion($id_persona) {
+         
+       $inscripcion = Inscripcion::where('id_persona', $id_persona)->first();
+		
+       return $inscripcion;
+    }
     public static function showDeportistasIncritosDeporte($deporte, $edicion, $canton){
       
       $deportista =  \DB::table('deportista')

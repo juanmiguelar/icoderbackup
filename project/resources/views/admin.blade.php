@@ -102,6 +102,15 @@
         @yield('header')
         @yield('content')
     </div>
+    <nav class="navbar navbar-default footer">
+            <footer class="footer">
+                <div class="container">
+                    <p class="text-muted">
+                        <br>© ICODER  2017<br>
+                    </p>
+                </div>
+            </footer>
+    </nav>
 
     <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

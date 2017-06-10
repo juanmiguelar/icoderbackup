@@ -32,9 +32,9 @@
                         <label for="dropdownidentificacion">Tipo Identificación</label>
                         
                         <div class="dropdown_identificacion">
-                            <select class="form-control" id="dropdown_identificacion">
-                                <option>Cédula</option>
-                                <option>Pasaporte</option>
+                            <select class="form-control" id="identificacion" name="identificacion">
+                                <option value="cedula" >Cédula</option>
+                                <option value="pasaporte" >Pasaporte</option>
                             </select>
                         </div>
                     </div>
@@ -225,7 +225,7 @@
                 <h5>Categorías</h5>
             </div>
            <div class="col-md-12">
-                <form action="{{URL::to('/') }}/storeCategorias" method="GET">
+                <form action="{{URL::to('/') }}/storeCategoria" method="GET">
                    <div class="col-md-4 form-group">
                        <h5>Seleccione la categoría en la que participará</h5>
                         <div class="checkbox">
@@ -276,6 +276,12 @@
                         <input class="btn btn-default" type="submit" value="Agregar">
                     </div>
                 </form>
+                <br/>
+                <form action="{{URL::to('/') }}/storeCategorias" method="GET">
+                    <div class="col-md-4 col-md-offset-8">
+                        <input class="btn btn-default" type="submit" value="Siguiente">
+                    </div>
+                </form> 
             </div>
         </div>
     </div>
@@ -343,40 +349,75 @@
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <form >
+                <form  action="{{URL::to('/') }}/storeArchivos"  method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
                     <div class="form-group">    
                         <label for="pasaporte_field">Fotografía Pasaporte</label>
-                        <input type="file" class="form-control-file" id="pasaporte_field" placeholder="">
+                        @if($active == 2)
+                        <input type="file" style="color:transparent;" class="form-control-file" id="pasaporte_field" name="pasaporte_field" required="required" placeholder="">
+                        <label for="pasaporte_field">{{$persona->pasaporte}}</label>
+                        @else
+                        <input type="file" class="form-control-file" id="pasaporte_field" name="pasaporte_field" required="required" placeholder="">
+                        @endif
                     </div>
                     <div class="form-group">    
-                        <label for="cedula_arriba_field">Fotografía cédula arriba</label>
-                        <input type="file" class="form-control-file" id="cedula_arriba_field" placeholder="">
+                        <label for="cedula_frente_field">Fotografía cédula arriba</label>
+                        @if($active == 2)
+                        <input type="file" style="color:transparent;" class="form-control-file" id="cedula_frente_field" name="cedula_frente_field" required="required" placeholder="">
+                        <label for="pasaporte_field">{{$persona->cedula_frente}}</label>
+                        @else
+                        <input type="file" class="form-control-file" id="cedula_frente_field" name="cedula_frente_field" required="required" placeholder="">
+                        @endif
                     </div>
                     <div class="form-group">    
-                        <label for="cedula_abajo_field">Fotografía cédula abajo</label>
-                        <input type="file" class="form-control-file" id="cedula_abajo_fiel" placeholder="">
+                        <label for="cedula_atras_field">Fotografía cédula atrás</label>
+                        @if($active == 2)
+                        <input type="file" style="color:transparent;" class="form-control-file" id="cedula_atras_field" name="cedula_atras_field" required="required" placeholder="">
+                        <label for="pasaporte_field">{{$persona->cedula_atras}}</label>
+                        @else
+                        <input type="file" class="form-control-file" id="cedula_atras_field" name="cedula_atras_field" required="required" placeholder="">
+                        @endif
                     </div>
                     <div class="form-group">    
                         <label for="boleta_field">Boleta Inscripción</label>
-                        <input type="file" class="form-control-file" id="boleta_field" placeholder="">
+                        @if($active == 2)
+                        <input type="file" style="color:transparent;" class="form-control-file" id="boleta_field" name="boleta_field" required="required" placeholder="">
+                        <label for="pasaporte_field">{{$persona->boleta_inscripcion}}</label>
+                        @else
+                        <input type="file" class="form-control-file" id="boleta_field" name="boleta_field" required="required" placeholder="">
+                        @endif
                     </div>
                     <div class="form-group">    
                         <label for="pase_cantonal_field">Pase Cantonal</label>
-                        <input type="file" class="form-control-file" id="pase_cantonal_field" placeholder="">
+                        @if($active == 2)
+                        <input type="file" style="color:transparent;" class="form-control-file"  id="pase_cantonal_field" name="pase_cantonal_field" required="required" placeholder="">
+                        <label for="pasaporte_field">pendiente este feature </label>
+                        @else
+                        <input type="file" class="form-control-file" id="pase_cantonal_field" name="pase_cantonal_field" required="required" placeholder="">
+                        @endif
                     </div>
                     
                     <div class="col-md-4">
                         <input class="btn btn-default" type="submit" value="Guardar">
                     </div>
                     
+                </form>
+                <form  action="{{URL::to('/') }}/finalizarInscripcion"  method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="col-md-4">
                         <input class="btn btn-default" type="submit" value="Finalizar">
                     </div>
-                    
-                    <div class="col-md-4">
-                        <input class="btn btn-default" type="submit" value="Cancelar">
-                    </div>
                 </form>
+                <form  action="{{URL::to('/') }}/cancelarInscripcion"  method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                     <div class="col-md-4">
+                        <input class="btn btn-default" type="submit" value="Cancelar">
+                    </div> 
+                </form>
+                <div class="col-md-4">
+                        <input class="btn btn-default"  type="hidden" value="Finalizar">
+                </div>
             </div>
         </div>
     </div>

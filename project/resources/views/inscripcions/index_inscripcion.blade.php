@@ -2,9 +2,9 @@
 
 @section('header')
     <div class="page-header clearfix">
-        <h1>
-            <i class="glyphicon glyphicon-align-justify"></i> {{ $deporteSeleccionado }}
-        </h1>
+        <h3>
+            <i class="glyphicon glyphicon-align-justify"></i> {{ $deporteSeleccionado->nombre }}
+        </h3>
     </div>
 @endsection
 
@@ -35,7 +35,7 @@
             </div>
             
             <div class="btn-group pull-right" role="group" aria-label="...">
-              <a type="button" class="btn btn-default" href="{{ url('inscripcion_individual') }}">Inscripción Individual</a>
+              <a type="button" class="btn btn-default" href="{{URL::to('/') }}/inscripcion_individual/{{$deporteSeleccionado->id_deporte}}">Inscripción Individual</a>
               <a type="button" class="btn btn-default">Inscripción Grupal</a>
               <a type="button" class="btn btn-default">Reporte</a>
             </div>

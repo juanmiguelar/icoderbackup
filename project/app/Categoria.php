@@ -28,6 +28,21 @@ class Categoria extends Model
        return $categorias;
       }
       
+    public static function showCategoriasDeporte($id_deporte) {
+         
+       $categorias = Categoria::where('id_deporte', $id_deporte)->orderBy('id_categoria', 'desc')->paginate(10);
+		
+       return $categorias;
+    }
+     public static function showCategoriasDeporteValidaEdad($id_deporte, $fecha_nacimiento) {
+         
+       $categorias = Categoria::where('id_deporte' ,'=', $id_deporte)
+                                ->where($fecha_nacimiento, '>=','anno_inicio')
+                                ->where($fecha_nacimiento,'<=', 'anno_final');
+		
+       return $categorias;
+    }
+      
     public static function validarCategoria($nombre, $deporte){
       $cantidad = Categoria::where('nombre', $nombre)->where('id_deporte', $deporte)->count();
       return $cantidad == 0;

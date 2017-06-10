@@ -27,7 +27,7 @@ class HomeController extends Controller
      
     public function index()
     {
-        $deportes = Deporte::orderBy('id_deporte', 'desc')->paginate(10);
+        $deportes = Deporte::orderBy('id_deporte', 'desc')->get();
         // $user = \DB::select("call user(1)");
 		return view('deporte_home', compact('deportes','user'));
     }

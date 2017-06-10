@@ -92,6 +92,7 @@ class Persona extends Model
 		                      'apellido1' => session('apellido1') ,
 		                      'apellido2' => session('apellido2') ,
 		                      'fecha_nacimiento' => session('fecha_nacimiento'),
+		                      'estado' => 'Pendiente',
 		                      'created_at' => date('Y-m-d H:i:s') ,
 		                      'updated_at' => date('Y-m-d H:i:s') ,
 		                      'active_flag' => 1]);
@@ -103,10 +104,9 @@ class Persona extends Model
 
 	public static
 
-	function updateMedica($persona)
-		{
+	function updateMedica($persona){
 		\DB::table('personas')->where('cedula_persona', $persona->cedula_persona)->update(['estatura' => $persona->estatura, 'peso' => $persona->peso, 'tipo_sangre' => $persona->tipo_sangre]);
-		}
+	}
 	
 	public static function updateContacto($persona){
 		\DB::table('personas')->where('cedula_persona', $persona->cedula_persona)
@@ -116,5 +116,27 @@ class Persona extends Model
 		                     'direccion' => $persona->direccion
 		                     ]);
 	}
+	
+	public static function updateRutaPasaporte($cedula, $ruta){
+			\DB::table('personas')->where('cedula_persona', $cedula)
+								  ->update(['pasaporte' => $ruta]);
 	}
+	
+	public static function updateRutaCedulaFrente($cedula, $ruta){
+			\DB::table('personas')->where('cedula_persona', $cedula)
+								  ->update(['cedula_frente' => $ruta]);
+	}
+	public static function updateRutaCedulaAtras($cedula, $ruta){
+			\DB::table('personas')->where('cedula_persona', $cedula)
+								  ->update(['cedula_atras' => $ruta]);
+	}
+	public static function updateRutaBoletaInscripcion($cedula, $ruta){
+			\DB::table('personas')->where('cedula_persona', $cedula)
+								  ->update(['boleta_inscripcion' => $ruta]);
+	}
+	public static function updateRutaPaseCantonal($cedula, $ruta){
+			\DB::table('personas')->where('cedula_persona', $cedula)
+								  ->update(['pasaporte' => $ruta]);
+	}
+}
 

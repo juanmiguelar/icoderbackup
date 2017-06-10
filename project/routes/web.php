@@ -37,7 +37,6 @@ Route::post("ingresar_deporte/", array("as"=>"dashboard","uses"=>"DeporteControl
 Auth::routes();
 
 Route::resource('home', 'HomeController');
-Route::get("inscripcion_individual", array("as"=>"dashboard","uses"=>"InscribeController@individual"));
 
 //PERSONAS
 Route::post("agregarPersona/{cedula_persona}/{nombre1}/{nombre2}/{apellido1}/{apellido2}/{fecha_nacimiento}/{nacionalidad}/{telefono}/{direccion}/{estatura}/{peso}/{tipo_sangre}/{tipo}/{email}/{cedula_frente}/{cedula_atras}/{boleta_inscripcion}", array("as"=>"dashboard", "uses"=>"PersonaController@agregarPersona"));
@@ -53,11 +52,19 @@ Route::get("store_editar_privilegio/{id}", array("as"=>"dashboard","uses"=>"Usua
 
 //INSCRIPCION INDIVIDUAL
 Route::get("index_inscripcion/{id}", array("as"=>"dashboard","uses"=>"InscripcionController@index_inscripcion"));
+Route::get("inscripcion_individual/{id}", array("as"=>"dashboard","uses"=>"InscripcionController@individual"));
+
 Route::get("buscarPadron", array("as"=>"dashboard","uses"=>"InscripcionController@buscarPadron"));
 Route::get("storePersonal", array("as"=>"dashboard","uses"=>"InscripcionController@storePersonal"));
 Route::get("storeMedica", array("as"=>"dashboard","uses"=>"InscripcionController@storeMedica"));
 Route::get("storeContacto", array("as"=>"dashboard","uses"=>"InscripcionController@storeContacto"));
+Route::get("storeCategoria", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategoria"));
 Route::get("storeCategorias", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategorias"));
+Route::post("storeArchivos", array("as"=>"dashboard","uses"=>"InscripcionController@subirArchivos"));
+Route::get("finalizarInscripcion", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategorias"));
+Route::get("cancelarInscripcion", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategorias"));
+
+
 
 
 
