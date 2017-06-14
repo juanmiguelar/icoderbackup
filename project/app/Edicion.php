@@ -56,4 +56,9 @@ class Edicion extends Model
 		$edicion->fecha_fin_inscripcion = date('m/d/Y', strtotime($edicion->fecha_fin_inscripcion));
 		return $edicion;
 	}
+	
+		public static  function buscarAnnoActivo($anno){
+		$edicion = Edicion::where('anno', $anno)->where('active_flag',1);
+		return $edicion;
+	}
 }

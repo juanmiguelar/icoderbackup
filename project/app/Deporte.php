@@ -34,6 +34,7 @@ class Deporte extends Model
       
        public static function showDeporte($id_deporte) {
          
+         //dd($id_deporte);
         $deporte =  Deporte::where('id_deporte', $id_deporte)->first();
     
         return $deporte;

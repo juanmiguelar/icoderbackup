@@ -37,9 +37,10 @@ class InscripcionController extends Controller
 	 *
 	 * @return void
 	 */
-	public
-
-	function __construct(Inscripcion $model)
+	 
+	
+	
+	public	function __construct(Inscripcion $model)
 		{
 		$this->model = $model;
 			
@@ -50,12 +51,9 @@ class InscripcionController extends Controller
 	 *
 	 * @return Response
 	 */
-	public
-
-	function index()
+	public function index()
 		{
 			$inscripcions = Inscripcion::where('active_flag', 1)->orderBy('id', 'desc')->paginate(10);
-			$active = Inscripcion::where('active_flag', 1);
 			// Obtenemos las categorias
 			$categorias = Categoria::showCategorias();
 			return view('inscripcions.index', compact('inscripcions', 'active','categorias'));
@@ -66,9 +64,7 @@ class InscripcionController extends Controller
 	 *
 	 * @return Response
 	 */
-	public
-
-	function index_inscripcion($deporte){
+	public function index_inscripcion($deporte){
 			//GuardarIdDeporteSesion
 			session(['id_deporte' => $deporte]);
 		
@@ -80,8 +76,8 @@ class InscripcionController extends Controller
 			$deporteSeleccionado = Deporte::showDeporte($deporte);
 			// dd($deporteSeleccionado);
 			return view('inscripcions.index_inscripcion', 
-				compact('deportistas', 'deportes', 'categorias','deporte','deporteSeleccionado'));
-		}
+				compact('deportistas', 'deportes', 'categorias','deporteSeleccionado'));
+	}
 		
 	public function individual($deporte){
 	   	
@@ -93,6 +89,7 @@ class InscripcionController extends Controller
 		$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
 		$pruebas =  Prueba::showPruebas();
 		$ramas =  Rama::showRamas();
+		
 		return view('inscripcions.informacion_inscripcion', compact('active','provincias','categorias', 'pruebas','ramas','cantons','tabName'));
 
 	}
@@ -109,66 +106,82 @@ class InscripcionController extends Controller
 		$pruebas =  Prueba::showPruebas();
 		$ramas =  Rama::showRamas();
 					
-					
 		// Si la cedula no esta vacia
 		if ( isset($_GET['cedula']) && isset($_GET['identificacion']) ){
 			
 			$cedula = $_GET['cedula'];
 			$tipo_identificacion = $_GET['identificacion'];
-		
 			
-			if($tipo_identificacion == "cedula"){
-			// Se busca a la persona en el padron electoral
-				$informacion_personal = \DB::table('padron')->where('cedula', '=', $cedula)->get();
-				
-			// Se concierte información a formato json, solo en este caso.
-				$informacion_personal = json_decode($informacion_personal);
-
-			
-				if($informacion_personal == null){
-					$active = 0;
-					Session::flash('message_type', 'success');
-					Session::flash('message_icon', 'checkmark');
-					Session::flash('message_header', 'Success');
-					Session::flash('message', 'No existe la persona con cédula '.$_GET['cedula'].' ');
-			
-					// Indicamos la tab a la que debe ir
-					$tabName = "buscar";
-					
-					// Colecciones para la vista
-					$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
-					return view('inscripcions.informacion_inscripcion', compact('persona','informacion_personal','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
-					
-				}else{
-					//El caso en que la persona si se encuentre en el padron
-					// Colocamos la información en la session.
-					session(['cedula_inscripcion' => $cedula]);
-					
-					//para desplegar los valores en los inputs
-					$active = 1;
-					
-					// Indicamos la tab a la que debe ir
-					$tabName = "personal";
-					
-					// Colecciones para la vista
-					$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
-					return view('inscripcions.informacion_inscripcion', compact('persona','informacion_personal','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+			$persona = Persona::showPersona($cedula);
+				session(['cedula_inscripcion' => $cedula]);
 						
+			//Si la persona no existe en la tabla PERSONA.
+			//Va a validar si es por cedula o pasaporte que la busca.
+			
+			if($persona == null){
+				
+				if($tipo_identificacion == "cedula"){
+				// Se busca a la persona en el padron electoral
+				$informacion_personal = \DB::table('padron')->where('cedula', '=', $cedula)->get();
+					
+				// Se convierte información a formato json, solo en este caso.
+				$informacion_personal = json_decode($informacion_personal);
+				
+					if($informacion_personal == null){
+						$active = 0;
+						Session::flash('message_type', 'success');
+						Session::flash('message_icon', 'checkmark');
+						Session::flash('message_header', 'Success');
+						Session::flash('message', 'No existe la persona con cédula '.$_GET['cedula'].' ');
+				
+						// Indicamos la tab a la que debe ir
+						$tabName = "buscar";
+						
+						// Colecciones para la vista
+						$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
+						return view('inscripcions.informacion_inscripcion', compact('persona','informacion_personal','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+						
+					}else{
+						//El caso en que la persona si se encuentre en el padron
+						//para desplegar los valores en los inputs
+						$active = 1;
+						
+						// Indicamos la tab a la que debe ir
+						$tabName = "personal";
+						
+						// Colecciones para la vista
+						$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
+						return view('inscripcions.informacion_inscripcion', compact('persona','informacion_personal','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+							
+					}
+				}else{
+					//Este caso es cuando es pasaporte, es decir alguna persona extrajera que no esta en padron
+						//para desplegar los valores en los inputs
+						$active = 0;
+						
+						// Indicamos la tab a la que debe ir
+						$tabName = "personal";
+						
+						// Colecciones para la vista
+						$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
+						return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
 				}
 			}else{
-				//Este caso es cuando es pasaporte, es decir alguna persona extrajera que no esta en padron
-				// Colocamos la información en la session.
-					session(['cedula_inscripcion' => $cedula]);
-					
-					//para desplegar los valores en los inputs
-					$active = 3;
-					
-					// Indicamos la tab a la que debe ir
-					$tabName = "personal";
-					
-					// Colecciones para la vista
-					$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
-					return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+				$active = 2;
+				$tabName = "personal";
+				
+				//colecciones para la vista
+				$provincias = Provincium::obtenerProvincias();
+				$cantons = Canton::obtenerCantones();
+				$pruebas =  Prueba::showPruebas();
+				$ramas =  Rama::showRamas();
+				$fecha_nacimiento = date('Y', strtotime($persona->fecha_nacimiento));
+				$categorias = Categoria::showCategoriasDeporteValidaEdad(session('id_deporte'),$fecha_nacimiento );
+				$inscripcions = Inscripcion::showPruebasRamaCategoriaInscrita( session('id_deporte'),$persona);
+  		
+		
+				return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+				
 			}
 		}
 	}
@@ -182,25 +195,32 @@ class InscripcionController extends Controller
 	public function storePersonal(Request $request){
 		$cedula = session('cedula_inscripcion');
 		
+		
 		// Verificar si la persona en la base de datos
 		// Si la persona no existe hago un insert
 		
 		$persona = Persona::showPersona($cedula);
+		$personaDatos = new Persona();
+		$personaDatos->cedula_persona = $cedula;
+		$personaDatos->nombre1 =$request->input("nombre_field"); 
+		$personaDatos->apellido1 = $request->input('apellido1_field');
+		$personaDatos->apellido2 = $request->input('apellido2_field');
+		$personaDatos->fecha_nacimiento = $request->input('fecha_nacimiento_field');
+		$personaDatos->sexo = $request->input('sexo_field');
+		
 		
 		if ($persona == null){
-		    Persona::insertarPersona();
+			//Se inserta persona nueva ya sea extranjera o nacional.
+			Persona::insertarPersona($personaDatos);
 		    $persona = Persona::showPersona($cedula);
+		    
+		    //Se crea una inscripción asociada a la persona 
 		    Inscripcion::insertarInscripcion($persona, session('id_deporte'));
+		    
 		}else{
 			//Si ya existe se hace un update con DATOS DE INFO PERSONAL
 			
-			$persona = new Persona();
-			$persona->cedula_persona = $cedula;
-		    $persona->nombre1 =$request->input("nombre_field"); 
-			$persona->apellido1 = $request->input('apellido1_field');
-			$persona->apellido2 = $request->input('apellido2_field');
-			$persona->fecha_nacimiento = $request->input('fecha_nacimiento_field');
-			Persona::updatePersonal($persona);
+			Persona::updatePersonal($personaDatos);
 			
 		}
 		$active = 2;
@@ -210,12 +230,13 @@ class InscripcionController extends Controller
 		$persona = Persona::showPersona($cedula);
 		$provincias = Provincium::obtenerProvincias();
 		$cantons = Canton::obtenerCantones();
-		$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
+		$inscripcions = Inscripcion::showPruebasRamaCategoriaInscrita( session('id_deporte'),$persona);
+  		$fecha_nacimiento = date('Y', strtotime($persona->fecha_nacimiento));
+		$categorias = Categoria::showCategoriasDeporteValidaEdad(session('id_deporte'),$fecha_nacimiento );
 		$pruebas =  Prueba::showPruebas();
 		$ramas =  Rama::showRamas();
 	
-		return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
-	
+		return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
 	}
 		/**
 	 * Store a newly created resource in storage.
@@ -252,11 +273,14 @@ class InscripcionController extends Controller
 		$persona = Persona::showPersona($cedula);
 		$provincias = Provincium::obtenerProvincias();	
 		$cantons = Canton::obtenerCantones();
-		$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
 		$pruebas =  Prueba::showPruebas();
 		$ramas =  Rama::showRamas();
+		$fecha_nacimiento = date('Y', strtotime($persona->fecha_nacimiento));
+		$categorias = Categoria::showCategoriasDeporteValidaEdad(session('id_deporte'),$fecha_nacimiento );
+		$inscripcions = Inscripcion::showPruebasRamaCategoriaInscrita( session('id_deporte'),$persona);
+  		
 		
-		return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+		return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
 	}
     	/**
 	 * Store a newly created resource in storage.
@@ -294,12 +318,13 @@ class InscripcionController extends Controller
 		$persona = Persona::showPersona($cedula);
 		$provincias = Provincium::obtenerProvincias();	
 		$cantons = Canton::obtenerCantones();
-		
-		$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
 		$pruebas =  Prueba::showPruebas();
 		$ramas =  Rama::showRamas();
-		
-		return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+		$fecha_nacimiento = date('Y', strtotime($persona->fecha_nacimiento));
+		$categorias = Categoria::showCategoriasDeporteValidaEdad(session('id_deporte'),$fecha_nacimiento );
+		$inscripcions = Inscripcion::showPruebasRamaCategoriaInscrita( session('id_deporte'),$persona);
+  		
+		return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
 	
 	}
 		/**
@@ -309,61 +334,41 @@ class InscripcionController extends Controller
 	 * @return Response
 	 */
 	public function storeCategoria(Request $request){
+		///validar no inscribirse en la misma 
+		//validar genero
+		
 		//Se toma la cedula de la sesión necesaria para consultas a la BD
 		$cedula = session('cedula_inscripcion');
-		
 		
 		//colecciones para la vista
 		$persona = Persona::showPersona($cedula);
 		$provincias = Provincium::obtenerProvincias();	
 		$cantons = Canton::obtenerCantones();
-		$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
 		$pruebas =  Prueba::showPruebas();
 		$ramas =  Rama::showRamas();
+		$fecha_nacimiento = date('Y', strtotime($persona->fecha_nacimiento));
+		$categorias = Categoria::showCategoriasDeporteValidaEdad(session('id_deporte'),$fecha_nacimiento );
 		
-		//Inputs de la vista
+		//Colecciones para la vista
 		$id_categoria = $request->input("radioCategoria");
 		$id_rama  = $request->input("prueba");
 		$id_prueba = $request->input("rama");
-		
-		//consulta categoria
 		$categoria = Categoria::showCategoria($id_categoria);
-		
-		//Toma el año de nacimiento para la validación
-		$fecha_nacimiento = date('Y', strtotime($persona->fecha_nacimiento));
-		
-		//Se valida la edad de la persona
-		if ($fecha_nacimiento >= $categoria->anno_inicio || $fecha_nacimiento <= $categoria->anno_final){
-			
-			//Se consulta la inscripcion para tomar su ID
-			$inscripcion = Inscripcion::showInscripcion($persona->id_persona);
-			
-			//Se agrega una inscripcion de prueba, rama y categoria
-			Inscripcion::agregarInscripcionPruebaCategoria($inscripcion->id_inscripcion,$id_categoria, $id_rama, $id_prueba);
+		$inscripcion = Inscripcion::showInscripcion($persona->id_persona);
+		$inscripcions = Inscripcion::showPruebasRamaCategoriaInscrita( session('id_deporte'),$persona);
+  		
+		//Se agrega una inscripcion de prueba, rama y categoria
+		Inscripcion::agregarInscripcionPruebaCategoria($inscripcion->id_inscripcion,$id_categoria, $id_rama, $id_prueba);
 	        
-	        //se devuelve a la vista de categorias para que siga agregando
-	        $active = 2;
-  			$tabName = "categorias";
-  			
-  			//Mensaje de exito de que agrego a la persona a esa categoria, rama y prueba
-  			Session::flash('message_type', 'success');
-			Session::flash('message_icon', 'checkmark');
-			Session::flash('message_header', 'Success');
-			Session::flash('message', 'Se agregó la categoría a la inscripción');
-			
-			return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
-		}else{
-			
-			//Se indica que no cumple con la edad para inscribirse en esa categoria
-			$active = 2;
-			
-			//Se devuelve al tab de categorias
-  			$tabName = "categorias";
-			Session::flash('message', 'No cumple con la edad para inscribirse en la categoria'); 
-			Session::flash('alert-class', 'alert-danger'); 
-			
-			return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
-		}
+	    $active = 2;
+  		$tabName = "categorias";
+  		
+  		Session::flash('message_type', 'success');
+		Session::flash('message_icon', 'checkmark');
+		Session::flash('message_header', 'Success');
+		Session::flash('message', 'Se agregó la categoría a la inscripción');
+		
+		return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
 	}
 		/**
 	 * Store a newly created resource in storage.
@@ -378,87 +383,85 @@ class InscripcionController extends Controller
 		$persona = Persona::showPersona($cedula);
 		$provincias = Provincium::obtenerProvincias();	
 		$cantons = Canton::obtenerCantones();
-		$categorias = Categoria::showCategoriasDeporte(session('id_deporte'));
 		$pruebas =  Prueba::showPruebas();
 		$ramas =  Rama::showRamas();
+		$fecha_nacimiento = date('Y', strtotime($persona->fecha_nacimiento));
+		$categorias = Categoria::showCategoriasDeporteValidaEdad(session('id_deporte'),$fecha_nacimiento );
+		$inscripcions = Inscripcion::showPruebasRamaCategoriaInscrita( session('id_deporte'),$persona);
+  		
+		
 		$active = 2;
   		$tabName = "documentos";
 		
-		return view('inscripcions.informacion_inscripcion', compact('persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+		return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
 		
 	}
 	
 	public function subirArchivos(Request $request){
 		$cedula = session('cedula_inscripcion');
-  
-	   //obtenemos el campo file definido en el formulario
+		
+	   // Obtenemos el campo file definido en el formulario
        $pasaporte = $request->file('pasaporte_field');
-       $cedula_frente = $request->file('cedula_frente_field');
        $cedula_atras = $request->file('cedula_atras_field');
+       $cedula_frente = $request->file('cedula_frente_field');
        $boleta = $request->file('boleta_field');
        $pase_cantonal = $request->file('pase_cantonal_field');
        
-       //PASAPORTE
-       $destinationPath = base_path().'/public/images/Pasaporte';
-       $fileName = $cedula.'.jpg';
-       $file = $pasaporte;
-	   $file->move($destinationPath, $fileName);
-	   $ruta =  "images/Pasaporte/" .$fileName;
-	   Persona::updateRutaPasaporte($cedula, $ruta);
-	   
-	   //CEDULA ATRAS
-	   $destinationPath = base_path().'/public/images/CedulaAtras';
-       $fileName = $cedula.'.jpg';
-       $file = $cedula_atras;
-	   $file->move($destinationPath, $fileName);
-	   $ruta =  "images/CedulaAtras/" .$fileName;
-	   Persona::updateRutaCedulaAtras($cedula, $ruta);
-	
-	   //CEDULA FRENTE
-	   $destinationPath = base_path().'/public/images/CedulaFrente';
-       $fileName = $cedula.'.jpg';
-       $file = $cedula_frente;
-	   $file->move($destinationPath, $fileName);
-	   $ruta =  "images/CedulaFrente/" .$fileName;
-	   Persona::updateRutaCedulaFrente($cedula, $ruta);
-	   
-	   //BOLETA INSCRIPCION
-	   $destinationPath = base_path().'/public/images/BoletaInscripcion';
-       $fileName = $cedula.'.jpg';
-       $file = $boleta;
-	   $file->move($destinationPath, $fileName);
-	   $ruta =  "images/BoletaInscripcion/" .$fileName;
-	   Persona::updateRutaBoletaInscripcion($cedula, $ruta);
-	   
-	   //PASE CANTONAL
-       $destinationPath = base_path().'/public/images/PaseCantonal';
-       $fileName = $cedula.'.jpg';
-       $file = $pase_cantonal;
-	   $file->move($destinationPath, $fileName);
-	   $ruta =  "images/PaseCantonal/" .$fileName;
-	   Persona::updateRutaPaseCantonal($cedula, $ruta);
-	   
-	   //Informacion necesaria para la vista index_inscripcion
-		$deportes = Deporte::orderBy('id_deporte', 'desc')->get();
-		$deportistas = Deportistum::show();
+       // Guardando las imagenes
+       $this->guardarImagen("Pasaporte", $pasaporte);
+	   $this->guardarImagen("CedulaAtras", $cedula_atras);
+	   $this->guardarImagen("CedulaFrente", $cedula_frente);
+	   $this->guardarImagen("BoletaInscripcion", $boleta);
+	   $this->guardarImagen("PaseCantonal", $pase_cantonal);
+	  
+	   //colecciones para la vista
+		$persona = Persona::showPersona($cedula);
+		$provincias = Provincium::obtenerProvincias();	
+		$cantons = Canton::obtenerCantones();
+		$pruebas =  Prueba::showPruebas();
+		$ramas =  Rama::showRamas();
+		$fecha_nacimiento = date('Y', strtotime($persona->fecha_nacimiento));
+		$categorias = Categoria::showCategoriasDeporteValidaEdad(session('id_deporte'),$fecha_nacimiento );
+		$inscripcions = Inscripcion::showPruebasRamaCategoriaInscrita( session('id_deporte'),$persona);
+  		
 		
-		// Obtenemos las categorias
-		$categorias = Categoria::showCategorias();
-		$deporteSeleccionado = Deporte::showDeporte(session('id_deporte' ));
-		// dd($deporteSeleccionado);
-		return view('inscripcions.index_inscripcion',compact('deportistas', 'deportes', 'categorias','deporte','deporteSeleccionado'));
+		$active = 2;
+  		$tabName = "documentos";
 		
-    }	
+		return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+		
+      
+	}	
     
-    public function guardarImagen($destination, $filename, $file){
+    public function guardarImagen($destination, $file){
     	
-    	//
+    	// Si el archivo viene vacio no hacer nada.
+    	//dd($file);
+    	if ( 0 != filesize( $file ) )
+		{
+	    	// file is empty
+           $persona = new Persona();
+	       $cedula = session('cedula_inscripcion');
+	    	
+	       $destinationPath = base_path() . '/public/images/' . $destination;
+	       $fileName = $cedula . '.jpg';
+		   $file->move($destinationPath, $fileName);
+		   $ruta =  "images/" . $destination . "/" .$fileName;
+		   $persona->$destination($cedula, $ruta);
+		}
     	
-       $destinationPath = base_path() . '/public/images/' . $destination;
-       $fileName = $filename.'.jpg';
-	   $file->move($destinationPath, $fileName);
-	   $ruta =  "images/" . $destination . "/" .$fileName;
-	   Persona::updateRutaPaseCantonal($cedula, $ruta);
+    	// Verificar si ya existe el archivo enlazado a la persona
+    	
+    	// En el caso de que este actualizar la ruta con el archivo nuevo
+    }
+    
+    public function finalizarInscripcion(){
+    	$cedula = session('cedula_inscripcion');
+    	$edicion = Edicion::buscarEdicionActiva();
+    	
+    	Persona::inscribirPersona($cedula);
+    	Inscripcion::insertarInscribes($cedula, $edicion);
+    	
     }
  
 	/**

@@ -56,4 +56,26 @@ class Inscripcion extends Model
 		                                      // Filtrar por el año de la edición
 		                                    ->where('inscribes.anno', '=', $edicion)->get();
     }
+    
+    
+    public static function insertarInscribes($persona, $edicion){
+    \DB::table ('inscribes')->insert([
+                                        'id_persona' => $persona->id_persona, 
+                                        'anno' => $edicion,
+                                        'author_id' => Auth::user()->id,
+                                        'active_flag'=> 1]);
+    }
+    public static function showPruebasRamaCategoriaInscrita($id_deporte, $persona){
+      
+      $inscripcions =  \DB::table('inscripcions')
+                                    ->join('inscripcion_prueba_categoria', 'inscripcion_prueba_categoria.id_inscripcion','=', 'inscripcions.id_inscripcion')
+                                    ->join('categorias', 'categorias.id_categoria','=', 'inscripcion_prueba_categoria.id_categoria')
+                                    ->join('pruebas', 'pruebas.id_prueba','=', 'inscripcion_prueba_categoria.id_prueba')
+                                    ->join('ramas', 'ramas.id_rama', '=', 'inscripcion_prueba_categoria.id_rama')
+		                                ->select('categorias.nombre as categoria_nombre', 'pruebas.nombre as prueba_nombre', 'ramas.nombre as rama_nombre')
+		                                    ->where('inscripcions.id_deporte', '=', $id_deporte)
+		                                    ->where('inscripcions.id_persona','=', $persona->id_persona)->paginate(5);
+		  return $inscripcions;
+    }
+    
 }

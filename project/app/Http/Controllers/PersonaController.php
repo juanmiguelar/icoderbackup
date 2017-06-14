@@ -179,7 +179,7 @@ class PersonaController extends Controller
 
 	public
 
-	function agregarPersona($cedula_persona, $nombre1, $nombre2, $apellido1, $apellido2, $fecha_nacimiento, $nacionalidad, $telefono, $direccion, $estatura, $peso, $tipo_sangre, $tipo, $email, $cedula_frente, $cedula_atras, $boleta_inscripcion)
+	function agregarPersona($cedula_persona, $nombre1, $nombre2, $apellido1, $apellido2, $sexo, $fecha_nacimiento, $nacionalidad, $telefono, $direccion, $estatura, $peso, $tipo_sangre, $tipo, $email, $cedula_frente, $cedula_atras, $boleta_inscripcion)
 	{
 		$persona = new Persona();
 		$persona->cedula_persona = $cedula_persona;
@@ -187,6 +187,7 @@ class PersonaController extends Controller
 		$persona->nombre2 = $nombre2;
 		$persona->apellido1 = $apellido1;
 		$persona->apellido2 = $apellido2;
+		$persona->sexo = $sexo;
 		$persona->fecha_nacimiento = $fecha_nacimiento;
 		$persona->nacionalidad = $nacionalidad;
 		$persona->telefono = $telefono;

@@ -16,6 +16,7 @@ class Persona extends Model
 	                        'nombre2',
 	                        'apellido1',
 	                        'apellido2',
+	                        'sexo',
 	                        'fecha_nacimiento',
 	                        'nacionalidad',
 	                        'telefono',
@@ -42,6 +43,7 @@ class Persona extends Model
 		                      'nombre2' => $persona->nombre2,
 		                      'apellido1' => $persona->apellido1,
 		                      'apellido2' => $persona->apellido2,
+		                      'sexo' => $persona->sexo,
 		                      'fecha_nacimiento' => $persona->fecha_nacimiento,
 		                      'nacionalidad' => $persona->nacionalidad,
 		                      'telefono' => $persona->telefono,
@@ -85,13 +87,14 @@ class Persona extends Model
 		\DB::table('personas')->where('id_persona', $id)->update(['active_flag' => '0']);
 	}
 
-	public static function insertarPersona(){
+	public static function insertarPersona($persona){
 		\DB::table('personas')->insert(['id_usuario' => Auth::user()->id,
-		                      'cedula_persona' => session('cedula_inscripcion') ,
-		                      'nombre1' => session('nombre1') ,
-		                      'apellido1' => session('apellido1') ,
-		                      'apellido2' => session('apellido2') ,
-		                      'fecha_nacimiento' => session('fecha_nacimiento'),
+		                      'cedula_persona' => session('cedula_inscripcion'),
+		                      'nombre1' => $persona->nombre1,
+		                      'apellido1' => $persona->apellido1,
+		                      'apellido2' => $persona->apellido2,
+		                      'sexo' => $persona->sexo,
+		                      'fecha_nacimiento' => $persona->fecha_nacimiento,
 		                      'estado' => 'Pendiente',
 		                      'created_at' => date('Y-m-d H:i:s') ,
 		                      'updated_at' => date('Y-m-d H:i:s') ,
@@ -99,9 +102,13 @@ class Persona extends Model
 	}
 
 	public static function updatePersonal($persona){
-		\DB::table('personas')->where('cedula_persona', $persona->cedula_persona)->update(['nombre1' => $persona->nombre1, 'apellido1' => $persona->apellido1, 'apellido2' => $persona->apellido2, 'fecha_nacimiento' => $persona->fecha_nacimiento]);
+		\DB::table('personas')->where('cedula_persona', $persona->cedula_persona)->update(['nombre1' => $persona->nombre1, 'apellido1' => $persona->apellido1, 'apellido2' => $persona->apellido2,'sexo' => $persona->sexo, 'fecha_nacimiento' => $persona->fecha_nacimiento]);
 	}
 
+	public static function inscribirPersona($cedula){
+		\DB::table('personas')->where('cedula_persona', $cedula)->update(['estado'=> 'Activo']);
+	}
+	
 	public static
 
 	function updateMedica($persona){
@@ -117,24 +124,30 @@ class Persona extends Model
 		                     ]);
 	}
 	
-	public static function updateRutaPasaporte($cedula, $ruta){
+	public static function cancelarInscripcion($cedula){
+	
+		\DB::table('personas')->where('cedula_persona', $cedula)	
+							  ->delete();
+	}
+	
+	public function Pasaporte($cedula, $ruta){
 			\DB::table('personas')->where('cedula_persona', $cedula)
 								  ->update(['pasaporte' => $ruta]);
 	}
 	
-	public static function updateRutaCedulaFrente($cedula, $ruta){
+	public function CedulaFrente($cedula, $ruta){
 			\DB::table('personas')->where('cedula_persona', $cedula)
 								  ->update(['cedula_frente' => $ruta]);
 	}
-	public static function updateRutaCedulaAtras($cedula, $ruta){
+	public function CedulaAtras($cedula, $ruta){
 			\DB::table('personas')->where('cedula_persona', $cedula)
 								  ->update(['cedula_atras' => $ruta]);
 	}
-	public static function updateRutaBoletaInscripcion($cedula, $ruta){
+	public function BoletaInscripcion($cedula, $ruta){
 			\DB::table('personas')->where('cedula_persona', $cedula)
 								  ->update(['boleta_inscripcion' => $ruta]);
 	}
-	public static function updateRutaPaseCantonal($cedula, $ruta){
+	public function PaseCantonal($cedula, $ruta){
 			\DB::table('personas')->where('cedula_persona', $cedula)
 								  ->update(['pasaporte' => $ruta]);
 	}

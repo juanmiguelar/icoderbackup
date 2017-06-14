@@ -56,7 +56,6 @@
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
                 <form action="{{URL::to('/') }}/storePersonal" method="GET">
-                    
                     <div class="form-group">    
                         <label for="nombre_field">Nombre</label>
                         @if($active == 1)
@@ -86,9 +85,39 @@
                          <input type="text" class="form-control" id="apellido2_field" name="apellido2_field" value="{{$persona->apellido2}}" placeholder="Segundo Apellido" required="required">
                          @else
                          <input type="text" class="form-control" id="apellido2_field" name="apellido2_field" placeholder="Segundo Apellido" required="required">
-                         
                          @endif
-                    </div>  
+                    </div>
+                    <div class="form-group">
+                        <label for="sexo_field">Sexo</label>
+                        
+                       @if($active == 2)
+                           <div class="radio">
+                                <label>
+                                <input type="radio" name="sexo_field" id="hombre_field" value="hombre" {{$persona->sexo == "hombre" ? 'checked' : '' }}>
+                                Hombre
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                <input type="radio" name="sexo_field" id="mujer_field" value="mujer"{{$persona->sexo == "mujer" ? 'checked' : '' }} >
+                                Mujer
+                            </label>
+                            </div>
+                        @else
+                           <div class="radio">
+                                <label>
+                                <input type="radio" name="sexo_field" id="hombre_field" value="hombre" >
+                                Hombre
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                <input type="radio" name="sexo_field" id="mujer_field" value="mujer">
+                                Mujer
+                            </label>
+                            </div>
+                        @endif
+                    </div>
                      <div class="form-group">   
                         <label for="fecha_nacimiento_field">Fecha Nacimiento</label>
                          @if($active == 1)
@@ -122,6 +151,8 @@
                         <label for="estatura_field">Estatura</label>
                         @if($active == 2)
                         <input type="text" class="form-control" id="estatura_field" name="estatura_field" value="{{$persona->estatura}}"placeholder="Estatura" required="required">
+                        @elseif($active == 0)
+                        <input type="text" class="form-control" id="estatura_field" name="estatura_field" placeholder="Estatura" required="required" disabled>
                         @else
                         <input type="text" class="form-control" id="estatura_field" name="estatura_field" placeholder="Estatura" required="required">
                         @endif
@@ -130,6 +161,8 @@
                         <label for="peso_field">Peso</label>
                         @if($active == 2)
                         <input type="text" class="form-control" id="peso_field" name="peso_field" value="{{$persona->peso}}" placeholder="Peso" required="required">
+                        @elseif($active == 0)
+                        <input type="text" class="form-control" id="peso_field" name="peso_field" placeholder="Peso" required="required" disabled>
                         @else
                         <input type="text" class="form-control" id="peso_field" name="peso_field" placeholder="Peso" required="required">
                         @endif
@@ -139,13 +172,19 @@
                          <label for="tipo_sangre_field">Tipo Sangre</label>
                         @if($active == 2)
                         <input type="text" class="form-control" id="tipo_sangre_field" name="tipo_sangre_field" value="{{$persona->tipo_sangre}}" placeholder="Tipo de Sangre" required="required">
+                        @elseif($active == 0)
+                        <input type="text" class="form-control" id="tipo_sangre_field" name="tipo_sangre_field" placeholder="Tipo de Sangre" required="required" disabled>
                         @else 
                         <input type="text" class="form-control" id="tipo_sangre_field" name="tipo_sangre_field" placeholder="Tipo de Sangre" required="required">
                         @endif
                     </div>
                     
                     <div class="col-md-4 col-md-offset-4">
+                        @if($active == 0)
+                        <input class="btn btn-default" type="submit" value="Siguiente" disabled>
+                        @else
                         <input class="btn btn-default" type="submit" value="Siguiente">
+                        @endif
                     </div>
                 </form>
             </div>
@@ -166,6 +205,8 @@
                         <label class="control-label" for="email_field">Email</label>
                         @if($active == 2)
                         <input type="email" class="form-control" id="email_field" name="email_field" value="{{$persona->email}}" placeholder="ejemplo@mail.com" required="required">
+                        @elseif($active == 0)
+                        <input type="email" class="form-control" id="email_field" name="email_field" placeholder="ejemplo@mail.com" required="required" disabled>
                         @else
                         <input type="email" class="form-control" id="email_field" name="email_field" placeholder="ejemplo@mail.com" required="required">
                         @endif
@@ -174,6 +215,8 @@
                         <label for="telefono_field">Teléfono</label>
                         @if($active == 2)
                         <input type="text" class="form-control" id="telefono_field" name="telefono_field"  value="{{$persona->telefono}}" placeholder="########" required="required">
+                        @elseif($active == 0)
+                        <input type="text" class="form-control" id="telefono_field" name="telefono_field" placeholder="########" required="required" disabled>
                         @else
                         <input type="text" class="form-control" id="telefono_field" name="telefono_field" placeholder="########" required="required">
                         @endif
@@ -213,27 +256,34 @@
                         @endif 
                     </div>
                     <div class="col-md-4 col-md-offset-4">
+                        @if($active == 0)
+                        <input class="btn btn-default" type="submit" value="Siguiente" disabled>
+                        @else
                         <input class="btn btn-default" type="submit" value="Siguiente">
+                        @endif
                     </div>
                 </form>
             </div>    
         </div>
     </div>  
+    
     <div id="categorias" class="tab-pane {{ !empty($tabName) && $tabName == 'categorias' ? 'active' : '' }}">
       <div class="row">
             <div class="col-md-12">
-                <h5>Categorías</h5>
+                <h5>Inscripción de pruebas</h5>
+                <p>Por favor seleccione la categoría, prueba y rama para inscrbir a la persona</p>
+                <br/>
             </div>
            <div class="col-md-12">
                 <form action="{{URL::to('/') }}/storeCategoria" method="GET">
                    <div class="col-md-4 form-group">
-                       <h5>Seleccione la categoría en la que participará</h5>
+                       <h5>Categoría</h5>
                         <div class="checkbox">
                             <div class="form-group">
                                 <!-- Aqui deberia ir un for con categorias -->
                                 @foreach($categorias as $categoria)
                                 <label for="radioCategoria">
-                                    <input type="radio" name="radioCategoria" value="{{$categoria->id_categoria}}" onclick="selectionCategoria(this)"> {{$categoria->nombre}}
+                                    <input type="radio" name="radioCategoria" value="{{$categoria->id_categoria}}" onclick="selectionCategoria(this)" required="required" > {{$categoria->nombre}}
                                 </label>
                                 <br/>
                                 @endforeach
@@ -241,14 +291,14 @@
                         </div>
                     </div>
                     <div  class="col-md-4 form-group">
-                       <h5>Seleccione la prueba en la que participará</h5>
+                       <h5>Prueba</h5>
                         <div class="checkbox">
                             <div id="radioPrueba" id="radios" class="form-group">
                                 <!-- Aqui deberia ir un for con categorias -->
                                 @foreach($pruebas as $prueba)
                                 <div id="radios" name="{{$prueba->id_categoria}}" style="visibility: hidden">
                                     <label for="radioPrueba">
-                                        <input type="radio" name="prueba" value="{{$prueba->id_prueba}}" onclick=""> {{$prueba->nombre}}
+                                        <input type="radio" name="prueba" value="{{$prueba->id_prueba}}" required="required"> {{$prueba->nombre}}
                                     </label>
                                     <br/>
                                 </div>
@@ -257,14 +307,14 @@
                         </div>
                     </div>
                     <div  class="col-md-4 form-group">
-                       <h5>Seleccione la rama en la que participará</h5>
+                       <h5>Rama</h5>
                         <div class="checkbox">
                             <div id="radioRama" class="form-group">
                                 <!-- Aqui deberia ir un for con categorias -->
                                 @foreach($ramas as $rama)
                                 <div name="{{$rama->id_categoria}}" style="visibility: hidden">
                                     <label for="radioRama" aria-hidden="true">
-                                        <input type="radio" name="rama" value="{{$rama->id_rama}}" onclick=""> {{$rama->nombre}} </input>
+                                        <input type="radio" name="rama" value="{{$rama->id_rama}}" required="required"> {{$rama->nombre}} </input>
                                     </label>
                                     <br/>
                                 </div>
@@ -272,17 +322,62 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 col-md-offset-4">
+                    <div class="col-md-4 col-md-offset-5">
+                        @if($active == 0)
+                        <input class="btn btn-default" type="submit" value="Agregar" disabled>
+                        @else
                         <input class="btn btn-default" type="submit" value="Agregar">
+                        @endif
                     </div>
                 </form>
                 <br/>
                 <form action="{{URL::to('/') }}/storeCategorias" method="GET">
-                    <div class="col-md-4 col-md-offset-8">
+                    <div class="col-md-4 col-md-offset-9">
+                        @if($active == 0)
+                        <input class="btn btn-default" type="submit" value="Siguiente" disabled>
+                        @else
                         <input class="btn btn-default" type="submit" value="Siguiente">
+                        @endif
                     </div>
-                </form> 
+                </form>
+            @if($active ==2)
+            <div class="row">
+                     
+                <div class="col-md-12">
+                    <h5><i class="glyphicon glyphicon-th-list"></i> Inscripción a pruebas
+                    </h5>
+                </div>
+                <div class="col-md-12"> 
+                    @if($inscripcions->count())
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Prueba</th>
+                                <th>Rama</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($inscripcions as $inscripcion)
+                                <tr>
+                                    <td>{{$inscripcion->categoria_nombre}}</td> 
+                                    <td>{{$inscripcion->prueba_nombre}}</td> 
+                                    <td>{{$inscripcion->rama_nombre}}</td> 
+                                </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    {!! $inscripcions->render() !!}
+                    @else
+                        <h3 class="text-center alert alert-info">No se ha inscrito en ninguna prueba</h3>
+                    @endif
+                </div>
+                
             </div>
+            @endif
+            </div>
+            
         </div>
     </div>
     
@@ -355,69 +450,88 @@
                     <div class="form-group">    
                         <label for="pasaporte_field">Fotografía Pasaporte</label>
                         @if($active == 2)
-                        <input type="file" style="color:transparent;" class="form-control-file" id="pasaporte_field" name="pasaporte_field" required="required" placeholder="">
+                        <input type="file" style="color:transparent;" class="form-control-file" id="pasaporte_field" name="pasaporte_field" placeholder="">
                         <label for="pasaporte_field">{{$persona->pasaporte}}</label>
+                        @elseif($active == 0)
+                        <input type="file" class="form-control-file" id="pasaporte_field" name="pasaporte_field"  placeholder="" disabled>
                         @else
-                        <input type="file" class="form-control-file" id="pasaporte_field" name="pasaporte_field" required="required" placeholder="">
+                        <input type="file" class="form-control-file" id="pasaporte_field" name="pasaporte_field"  placeholder="">
                         @endif
                     </div>
                     <div class="form-group">    
                         <label for="cedula_frente_field">Fotografía cédula arriba</label>
                         @if($active == 2)
-                        <input type="file" style="color:transparent;" class="form-control-file" id="cedula_frente_field" name="cedula_frente_field" required="required" placeholder="">
+                        <input type="file" style="color:transparent;" class="form-control-file" id="cedula_frente_field" name="cedula_frente_field"  placeholder="">
                         <label for="pasaporte_field">{{$persona->cedula_frente}}</label>
+                        @elseif($active == 0)
+                        <input type="file" class="form-control-file" id="cedula_frente_field" name="cedula_frente_field"  placeholder="" disabled>
                         @else
-                        <input type="file" class="form-control-file" id="cedula_frente_field" name="cedula_frente_field" required="required" placeholder="">
+                        <input type="file" class="form-control-file" id="cedula_frente_field" name="cedula_frente_field"  placeholder="">
                         @endif
                     </div>
                     <div class="form-group">    
                         <label for="cedula_atras_field">Fotografía cédula atrás</label>
                         @if($active == 2)
-                        <input type="file" style="color:transparent;" class="form-control-file" id="cedula_atras_field" name="cedula_atras_field" required="required" placeholder="">
+                        <input type="file" style="color:transparent;" class="form-control-file" id="cedula_atras_field" name="cedula_atras_field"  placeholder="">
                         <label for="pasaporte_field">{{$persona->cedula_atras}}</label>
+                        @elseif($active == 0)
+                        <input type="file" class="form-control-file" id="cedula_atras_field" name="cedula_atras_field"  placeholder="" disabled>
                         @else
-                        <input type="file" class="form-control-file" id="cedula_atras_field" name="cedula_atras_field" required="required" placeholder="">
+                        <input type="file" class="form-control-file" id="cedula_atras_field" name="cedula_atras_field"  placeholder="">
                         @endif
                     </div>
                     <div class="form-group">    
                         <label for="boleta_field">Boleta Inscripción</label>
                         @if($active == 2)
-                        <input type="file" style="color:transparent;" class="form-control-file" id="boleta_field" name="boleta_field" required="required" placeholder="">
+                        <input type="file" style="color:transparent;" class="form-control-file" id="boleta_field" name="boleta_field"  placeholder="">
                         <label for="pasaporte_field">{{$persona->boleta_inscripcion}}</label>
+                        @elseif($active == 0)
+                        <input type="file" class="form-control-file" id="boleta_field" name="boleta_field"  placeholder="" disabled>
                         @else
-                        <input type="file" class="form-control-file" id="boleta_field" name="boleta_field" required="required" placeholder="">
+                        <input type="file" class="form-control-file" id="boleta_field" name="boleta_field"  placeholder="">
                         @endif
                     </div>
                     <div class="form-group">    
                         <label for="pase_cantonal_field">Pase Cantonal</label>
                         @if($active == 2)
-                        <input type="file" style="color:transparent;" class="form-control-file"  id="pase_cantonal_field" name="pase_cantonal_field" required="required" placeholder="">
+                        <input type="file" style="color:transparent;" class="form-control-file"  id="pase_cantonal_field" name="pase_cantonal_field" placeholder="">
                         <label for="pasaporte_field">pendiente este feature </label>
+                        @elseif($active == 0)
+                        <input type="file" class="form-control-file" id="pase_cantonal_field" name="pase_cantonal_field" placeholder="" disabled>
                         @else
-                        <input type="file" class="form-control-file" id="pase_cantonal_field" name="pase_cantonal_field" required="required" placeholder="">
+                        <input type="file" class="form-control-file" id="pase_cantonal_field" name="pase_cantonal_field" placeholder="">
                         @endif
                     </div>
                     
                     <div class="col-md-4">
+                        @if($active == 0)
+                        <input class="btn btn-default" type="submit" value="Guardar" disabled>
+                        @else
                         <input class="btn btn-default" type="submit" value="Guardar">
+                        @endif
                     </div>
                     
                 </form>
                 <form  action="{{URL::to('/') }}/finalizarInscripcion"  method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="col-md-4">
+                        @if($active == 0)
+                        <input class="btn btn-default" type="submit" value="Finalizar" disabled>
+                        @else
                         <input class="btn btn-default" type="submit" value="Finalizar">
+                        @endif
                     </div>
                 </form>
                 <form  action="{{URL::to('/') }}/cancelarInscripcion"  method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                      <div class="col-md-4">
-                        <input class="btn btn-default" type="submit" value="Cancelar">
+                        @if($active == 0)
+                        <a  class="btn btn-default" href="{{ url('/home')}}" >Cancelar</a>
+                        @else
+                        <a class="btn btn-default" href="{{ url('/home') }}" >Cancelar</a>
+                        @endif
                     </div> 
                 </form>
-                <div class="col-md-4">
-                        <input class="btn btn-default"  type="hidden" value="Finalizar">
-                </div>
             </div>
         </div>
     </div>

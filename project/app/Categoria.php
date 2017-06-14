@@ -35,10 +35,10 @@ class Categoria extends Model
        return $categorias;
     }
      public static function showCategoriasDeporteValidaEdad($id_deporte, $fecha_nacimiento) {
-         
+     
        $categorias = Categoria::where('id_deporte' ,'=', $id_deporte)
-                                ->where($fecha_nacimiento, '>=','anno_inicio')
-                                ->where($fecha_nacimiento,'<=', 'anno_final');
+                                ->where('anno_inicio' , '<=', $fecha_nacimiento)
+                                ->where( 'anno_final','>=', $fecha_nacimiento)->get();
 		
        return $categorias;
     }
