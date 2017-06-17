@@ -61,9 +61,13 @@ Route::get("storeContacto", array("as"=>"dashboard","uses"=>"InscripcionControll
 Route::get("storeCategoria", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategoria"));
 Route::get("storeCategorias", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategorias"));
 Route::post("storeArchivos", array("as"=>"dashboard","uses"=>"InscripcionController@subirArchivos"));
-Route::get("finalizarInscripcion", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategorias"));
+Route::post("finalizarInscripcion", array("as"=>"dashboard","uses"=>"InscripcionController@finalizarInscripcion"));
 Route::get("cancelarInscripcion", array("as"=>"dashboard","uses"=>"InscripcionController@storeCategorias"));
 
+
+//INSCRIPCION GRUPAL
+Route::get("inscripcion_grupal/{id}", array("as"=>"dashboard","uses"=>"InscripcionController@grupal"));
+Route::post("leerArchivo", array("as"=>"dashboard","uses"=>"InscripcionController@leerArchivo"));
 
 
 

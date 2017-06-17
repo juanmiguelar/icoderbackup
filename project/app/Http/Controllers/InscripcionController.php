@@ -19,6 +19,7 @@ use App\Canton;
 use App\Categoria;
 use App\Rama;
 use App\Prueba;
+use App\Edicion;
 
 use Illuminate\Http\Request;
 use \Session;
@@ -357,19 +358,34 @@ class InscripcionController extends Controller
 		$inscripcion = Inscripcion::showInscripcion($persona->id_persona);
 		$inscripcions = Inscripcion::showPruebasRamaCategoriaInscrita( session('id_deporte'),$persona);
   		
-		//Se agrega una inscripcion de prueba, rama y categoria
-		Inscripcion::agregarInscripcionPruebaCategoria($inscripcion->id_inscripcion,$id_categoria, $id_rama, $id_prueba);
-	        
-	    $active = 2;
-  		$tabName = "categorias";
-  		
-  		Session::flash('message_type', 'success');
-		Session::flash('message_icon', 'checkmark');
-		Session::flash('message_header', 'Success');
-		Session::flash('message', 'Se agregó la categoría a la inscripción');
-		
-		return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
-	}
+		//Se valida que no este inscrit@ en la prueba
+		if(Inscripcion::validarInscripcionPruebaCategoria($inscripcion->id_inscripcion,$id_categoria, $id_rama, $id_prueba)){
+			Session::flash('message_type', 'Success');
+			Session::flash('message_icon', 'checkmark');
+			Session::flash('message_header', 'Success');
+			Session::flash('message', 'Ya está inscrito en la prueba. Seleccione otra prueba.');
+			
+			$active = 2;
+	  		$tabName = "categorias";
+			
+			return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+			
+		}else{
+			//Sino se inserta la inscripcion
+			Inscripcion::agregarInscripcionPruebaCategoria($inscripcion->id_inscripcion,$id_categoria, $id_rama, $id_prueba);
+		    $active = 2;
+	  		$tabName = "categorias";
+	  		
+	  		Session::flash('message_type', 'success');
+			Session::flash('message_icon', 'checkmark');
+			Session::flash('message_header', 'Success');
+			Session::flash('message', 'Se agregó la categoría a la inscripción');
+			
+			return view('inscripcions.informacion_inscripcion', compact('inscripcions','persona','provincias','cantons','categorias','pruebas','ramas','active', 'tabName'));
+			
+		}
+		    
+	    }
 		/**
 	 * Store a newly created resource in storage.
 	 *
@@ -458,20 +474,70 @@ class InscripcionController extends Controller
     public function finalizarInscripcion(){
     	$cedula = session('cedula_inscripcion');
     	$edicion = Edicion::buscarEdicionActiva();
-    	
+   
     	Persona::inscribirPersona($cedula);
-    	Inscripcion::insertarInscribes($cedula, $edicion);
+    	Inscripcion::insertarInscribes($cedula, $edicion->anno);
+    	
+    	$deporte = session('id_deporte');
+    	
+    	
+    	Session::flash('message_type', 'blue');
+		Session::flash('message_icon', 'checkmark');
+		Session::flash('message_header', 'Success');
+		Session::flash('message', "Se ha realizado la inscripción correctamente.");
+		return $this->index_inscripcion($deporte);
     	
     }
  
+	
+	
+	public function leerArchivo(){
+		
+		
+	 if(Input::hasFile('import_file')){
+			$path = Input::file('import_file')->getRealPath();
+			$data = Excel::load($path, function($reader) {
+			})->get();
+			if(!empty($data) && $data->count()){
+				foreach ($data as $key => $value) {
+					$insert[] = ['nombre' => $value->nombre, 'apellido1' => $value->apellido1];
+				}
+				if(!empty($insert)){
+					//dd($insert);
+					// DB::table('items')->insert($insert);
+					// dd('Insert Record successfully.');
+				}
+			}
+		}
+		
+		$deportes = Deporte::orderBy('id_deporte', 'desc')->get();//Se cargan en el dropdaown
+		$deportistas = Deportistum::show();
+		// Obtenemos las categorias
+		$deporteSeleccionado = Deporte::showDeporte(session('id_deporte'));
+		return view('inscripcions.index_inscripcion_grupal',compact('deportistas','deportes','deporteSeleccionado'));
+	}
+
+	
+	public function grupal($deporte){
+	   	
+	//GuardarIdDeporteSesion
+			session(['id_deporte' => $deporte]);
+		
+			$deportes = Deporte::orderBy('id_deporte', 'desc')->get();
+			$deportistas = Deportistum::show();
+			
+			// Obtenemos las categorias
+			$categorias = Categoria::showCategorias();
+			$deporteSeleccionado = Deporte::showDeporte($deporte);
+			return view('inscripcions.index_inscripcion_grupal',compact('deportistas', 'deportes', 'categorias','deporteSeleccionado'));
+	}
+	
 	/**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return Response
 	 */
-	public
-
-	function create()
+	public function create()
 		{
 		return view('inscripcions.create');
 		}

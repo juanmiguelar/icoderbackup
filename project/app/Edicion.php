@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 class Edicion extends Model
 
 {
-	protected $fillable = ['lugar', 'fecha_inicio', 'fecha_fin', 'fecha_inscripcion', 'fecha_fin_inscripcion'];
+	protected $fillable = ['anno','lugar', 'fecha_inicio', 'fecha_fin', 'fecha_inscripcion', 'fecha_fin_inscripcion'];
 	
 	public
 
@@ -57,8 +57,8 @@ class Edicion extends Model
 		return $edicion;
 	}
 	
-		public static  function buscarAnnoActivo($anno){
-		$edicion = Edicion::where('anno', $anno)->where('active_flag',1);
+		public static function buscarEdicionActiva(){
+		$edicion = Edicion::where('active_flag',1)->first();
 		return $edicion;
 	}
 }

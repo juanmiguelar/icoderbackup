@@ -60,11 +60,15 @@ class Inscripcion extends Model
     
     public static function insertarInscribes($persona, $edicion){
     \DB::table ('inscribes')->insert([
-                                        'id_persona' => $persona->id_persona, 
                                         'anno' => $edicion,
+                                        'id_persona' => $persona, 
                                         'author_id' => Auth::user()->id,
-                                        'active_flag'=> 1]);
+                                        'active_flag'=> 1,
+                                        'created_at' => date('Y-m-d H:i:s'), 
+                                        'updated_at' => date('Y-m-d H:i:s')
+                                        ]);
     }
+    
     public static function showPruebasRamaCategoriaInscrita($id_deporte, $persona){
       
       $inscripcions =  \DB::table('inscripcions')
@@ -77,5 +81,15 @@ class Inscripcion extends Model
 		                                    ->where('inscripcions.id_persona','=', $persona->id_persona)->paginate(5);
 		  return $inscripcions;
     }
-    
+    public static function validarInscripcionPruebaCategoria($id_inscripcion, $id_categoria, $id_rama, $id_prueba) {
+         
+       $inscripcion = \DB::table('inscripcion_prueba_categoria')
+		                              ->select('*')
+		                              ->where('id_inscripcion', '=', $id_inscripcion)
+		                              ->where('id_rama', '=', $id_rama)
+		                              ->where('id_prueba', '=',  $id_prueba)
+		                              ->where('id_categoria','=', $id_categoria)->get();
+	
+       return $inscripcion;
+    }
 }
